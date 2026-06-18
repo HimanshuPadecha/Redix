@@ -1,65 +1,91 @@
-export const parser = (buffer: Buffer): string | null => {
-  const tokens = buffer.toString();
+export const parser = (
+  buffer: Buffer,
+): { command: string; charsprocessed: number } | null => {
+  const token = buffer.toString();
 
-  // check if the buffer is complete or not ??
-  const elements = tokens.split("\r\n");
-  elements.pop();
-
-  if (!elements) {
-    console.log("The message is yet to come");
+  if (!token.startsWith("*")) {
+    console.log("Not staring with command length");
     return null;
   }
 
-  const lengthToken = elements.shift();
+  let charsprocessed = 1;
+  let cursor = 1;
 
-  if (!lengthToken) {
-    console.log("Command length token not found");
-    return null;
+  while (token[cursor] != "\r") {
+    cursor++;
+    charsprocessed++;
+
+    if (cursor >= token.length) {
+      return null;
+    }
   }
 
-  if (lengthToken.length !== 2 || !lengthToken.startsWith("*")) {
-    console.log("Got invalid length token ");
-    return null;
-  }
-
-  const length = parseInt(lengthToken[1]!);
-
-  if (Number.isNaN(length)) {
-    console.log("Got invalid length");
-    return null;
-  }
-
-  if (length * 2 !== elements.length) {
-    console.log("message is incomplete");
-    return null;
-  }
+  let length = parseInt(token.slice(1, cursor));
 
   const parsed: string[] = [];
 
-  for (let i = 0; i < elements.length; i += 2) {
-    const len = elements[i];
+  while (length > 0) {
+    // getting to doller
+    while (token[cursor] !== "$") {
+      cursor++;
+      charsprocessed++;
 
-    if (!len!.startsWith("$") || len!.length !== 2) {
-      console.log("Invalid message length token");
+      if (cursor >= token.length) {
+        return null;
+      }
+    }
+
+    //skip the doller
+    cursor++;
+    charsprocessed++;
+
+    if (cursor >= token.length) {
       return null;
     }
 
-    const currentLength = parseInt(len![1]!);
+    let init = cursor;
 
-    if (Number.isNaN(currentLength)) {
-      console.log("Invalid message token found !!");
+    // get word length
+    while (token[cursor] !== "\r") {
+      cursor++;
+      charsprocessed++;
+
+      if (cursor >= token.length) {
+        return null;
+      }
+    }
+
+    let wordLen = parseInt(token.slice(init, cursor));
+
+    // skip /r/n again
+    cursor += 2;
+    charsprocessed += 2;
+
+    if (cursor >= token.length) {
       return null;
     }
 
-    const message = elements[i + 1];
+    init = cursor;
 
-    if (message!.length !== currentLength) {
-      console.log("Message is incomplete");
-      return null;
+    while (wordLen > 0) {
+
+      cursor++;
+      charsprocessed++;
+
+      if (cursor >= token.length) {
+        return null;
+      }
+
+      wordLen--;
     }
 
-    parsed.push(message!);
+    const word = token.slice(init, cursor);
+
+    parsed.push(word);
+    length--;
   }
 
-  return parsed.join(" ");
+  charsprocessed += 2;
+
+  return { command: parsed.join(" "), charsprocessed };
 };
