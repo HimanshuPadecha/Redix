@@ -1,12 +1,9 @@
 import net from "node:net";
 import type { Command } from "./types";
-import { writeNewline, writeToTerminal } from "./utils";
-import { set } from "./commands/set";
-import { memory } from "./memory";
-import { get } from "./commands/get";
-import { del } from "./commands/del";
-import { exists } from "./commands/exists";
 import { commandDispatcher } from "./commands/dispatcher";
+import { populateOldDataInAOF } from "./persistence/utils";
+
+populateOldDataInAOF();
 
 const server = net.createServer((socket) => {
   console.log("client connected");
@@ -14,12 +11,22 @@ const server = net.createServer((socket) => {
   socket.write("CONNECTED TO SERVER.\n");
   socket.write("Server > ");
 
-  socket.on("data", (data) => {
-    const input = data.toString().trim();
+  let pendingBuffer = Buffer.alloc(0);
 
-    const [command, ...args] = input.split(" ");
+  socket.on("data", (data: Buffer | string) => {
 
-    commandDispatcher(socket, command as Command, args);
+    const dataBuffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
+    pendingBuffer = Buffer.concat([pendingBuffer, dataBuffer]);
+
+    console.log(pendingBuffer.toString());
+    console.log(pendingBuffer.toString().length);
+
+    
+
+    // const input = dataBuffer.toString().trim();
+    // const [command, ...args] = input.split(" ");
+
+    // commandDispatcher(socket, command as Command, args);
   });
 
   socket.on("end", () => {

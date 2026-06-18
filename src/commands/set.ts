@@ -1,6 +1,7 @@
 import type { Socket } from "node:net";
 import { writeToTerminal } from "../utils";
 import { memory } from "../memory";
+import { writeCommandInAOF } from "../persistence/utils";
 
 export const set = (socket: Socket, args: string[]) => {
   if (!args) {
@@ -26,5 +27,6 @@ export const set = (socket: Socket, args: string[]) => {
   }
 
   memory.set(key, value);
+  writeCommandInAOF(`set ${key} ${value}`);
   writeToTerminal(socket, "Key added !");
 };
