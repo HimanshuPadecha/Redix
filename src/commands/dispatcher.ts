@@ -47,6 +47,11 @@ export const commandDispatcher = (
       break;
     }
 
+    case "incr": {
+      
+      break
+    }
+
     default: {
       socket.write(encoder.error());
     }

@@ -26,6 +26,10 @@ class BaseEncoder {
   error(): string {
     throw new Error("ERROR encoder is not implemented");
   }
+
+  incr(updated: number): string {
+    throw new Error("INCR encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -55,6 +59,10 @@ class Encoder extends BaseEncoder {
 
   override error(): string {
     return "-ERR unknown command\r\n";
+  }
+
+  override incr(updated: number): string {
+    return `:` + String(updated) + "\r\n";
   }
 }
 
