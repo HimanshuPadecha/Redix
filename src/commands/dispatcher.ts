@@ -5,6 +5,7 @@ import { get } from "./get";
 import { del } from "./del";
 import { exists } from "./exists";
 import { encoder } from "../core/encoder";
+import { incr } from "./incr";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -48,7 +49,7 @@ export const commandDispatcher = (
     }
 
     case "incr": {
-      
+      incr(socket,args)
       break
     }
 

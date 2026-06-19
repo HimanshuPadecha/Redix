@@ -17,10 +17,7 @@ export const incr = (socket: Socket, args: string[]) => {
   }
 
   if (!memory.has(key)) {
-    writeCommandInAOF(`incr ${key}`);
-    memory.set(key, "1");
-    socket.write(":1\r\n");
-    return;
+    memory.set(key, "0");
   }
 
   const current = parseInt(memory.get(key)!);
