@@ -11,7 +11,7 @@ export const ttl = (socket: Socket, args: string[]) => {
 
   const [key] = args;
 
-  if (!key || key === undefined) {
+  if (!key) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
@@ -23,7 +23,7 @@ export const ttl = (socket: Socket, args: string[]) => {
     return;
   }
 
-  const { expiresAt, value } = current;
+  const { expiresAt } = current;
 
   if (!expiresAt) {
     socket.write(":-1\r\n");
@@ -38,5 +38,5 @@ export const ttl = (socket: Socket, args: string[]) => {
     return;
   }
 
-  socket.write(encoder.ttl(Date.now() - expiresAt));
+  socket.write(encoder.ttl(Math.round((expiresAt - Date.now()) / 1000)));
 };

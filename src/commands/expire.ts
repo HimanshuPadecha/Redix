@@ -3,29 +3,19 @@ import { memory } from "../memory";
 import { encoder } from "../core/encoder";
 
 export const expire = (socket: Socket, args: string[]) => {
-  if (!args) {
+  if (!args || args.length !== 2) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
-  if (args.length !== 2) {
+  const [key, seconds] = args;
+
+  if (!key || !seconds) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
-  const [key, ttl] = args;
-
-  if (!key) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
-  }
-
-  if (!ttl) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
-  }
-
-  if (Number.isNaN(parseInt(ttl))) {
+  if (Number.isNaN(parseInt(seconds))) {
     socket.write("-ERR Invalid time to live\r\n");
     return;
   }
@@ -39,8 +29,10 @@ export const expire = (socket: Socket, args: string[]) => {
 
   memory.set(key, {
     value: current.value,
-    expiresAt: Date.now() + parseInt(ttl),
+    expiresAt: Date.now() + parseInt(seconds) * 1000,
   });
+
+  console.log(memory.get(key));
 
   socket.write(encoder.expires());
 };

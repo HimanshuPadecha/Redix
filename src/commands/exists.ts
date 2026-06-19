@@ -10,7 +10,7 @@ export const exists = (socket: Socket, args: string[]) => {
 
   const [key] = args;
 
-  if (!key || key === undefined) {
+  if (!key) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
   }

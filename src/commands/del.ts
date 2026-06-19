@@ -11,17 +11,17 @@ export const del = (socket: Socket, args: string[]) => {
 
   const [key] = args;
 
-  if (!key || key === undefined) {
+  if (!key) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
-  if (!memory.has(key)) {
+  const isDeleted = memory.delete(key);
+
+  if (!isDeleted) {
     socket.write(":0\r\n");
     return;
   }
-
-  memory.delete(key);
 
   writeCommandInAOF(`del ${key}`);
 
