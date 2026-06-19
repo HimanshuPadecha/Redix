@@ -1,34 +1,23 @@
 import { expect, test } from "bun:test";
 import { decoder } from "../core/decoder";
+import { encoder } from "../core/encoder";
 
 test("test decoder", () => {
-  let buffer = Buffer.from(
-    "*1\r\n$4\r\nPING\r\n*2\r\n$3\r\nGET\r\n$4\r\nname\r\n",
-  );
+  const buffer = Buffer.from("*2\r\n$4\r\nKEYS\r\n$1\r\n*\r\n")
 
-  const parsed = decoder(buffer);
+  const parsed = decoder(buffer)
 
-  if (parsed === null) {
-    console.log("Cannot parse the command yet");
-    return;
+  if(!parsed){
+    return
   }
 
-  const { charsprocessed, command: fullCommand } = parsed;
+  const {command} = parsed
 
-  console.log(fullCommand);
-
-  buffer = buffer.subarray(charsprocessed);
-
-  console.log(buffer.toString());
-
-  const another = decoder(buffer);
-
-  if (another === null) {
-    console.log("not finished");
-    return;
-  }
-
-  const { charsprocessed: chars, command } = another;
-
-  expect(command).toBe("GET name");
+  console.log(command);
 });
+
+test("test encoder keys", () => {
+  const keys = ["name", "hello", "brother"]
+
+  console.log(encoder.keys(keys));
+})

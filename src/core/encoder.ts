@@ -30,6 +30,10 @@ class BaseEncoder {
   incr(updated: number): string {
     throw new Error("INCR encoder is not implemented");
   }
+
+  keys(keys: string[]): string {
+    throw new Error("KEYS encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -63,6 +67,15 @@ class Encoder extends BaseEncoder {
 
   override incr(updated: number): string {
     return `:` + String(updated) + "\r\n";
+  }
+
+  override keys(keys: string[]): string {
+    const encodedkeys = keys.map((key) => `$${key.length}\r\n${key}`);
+
+    encodedkeys.unshift(String(`*${keys.length}`));
+    encodedkeys.push("")
+
+    return encodedkeys.join("\r\n");
   }
 }
 
