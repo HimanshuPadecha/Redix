@@ -4,7 +4,7 @@ import { encoder } from "../core/encoder";
 
 export const get = (socket: Socket, args: string[]) => {
   if (!args || args.length > 1) {
-    socket.write("-ERR wrong number of arguments\r\n");
+    socket.write("-ERR wrong number of arguments\r\n"); 
     return;
   }
 
@@ -20,5 +20,9 @@ export const get = (socket: Socket, args: string[]) => {
     return;
   }
 
-  encoder.get(memory.get(key)!);
+  const value = memory.get(key)
+
+  const encoded = encoder.get(value!)
+
+  socket.write(encoded)
 };

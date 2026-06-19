@@ -9,9 +9,6 @@ populateOldDataInAOF();
 const server = net.createServer((socket) => {
   console.log("client connected");
 
-  socket.write("CONNECTED TO SERVER.\n");
-  socket.write("Server > ");
-
   let pendingBuffer = Buffer.alloc(0);
 
   socket.on("data", (data: Buffer | string) => {

@@ -18,7 +18,12 @@ export const commandDispatcher = (
     }
 
     case "echo": {
-      socket.write(encoder.echo(args));
+      if (args.length !== 1) {
+        socket.write("-ERR wrong number of arguments\r\n");
+        return;
+      }
+
+      socket.write(encoder.echo(args.shift()!));
       break;
     }
 
@@ -43,7 +48,7 @@ export const commandDispatcher = (
     }
 
     default: {
-      socket.write(encoder.error())
+      socket.write(encoder.error());
     }
   }
 };

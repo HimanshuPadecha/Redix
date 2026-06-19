@@ -19,7 +19,7 @@ class BaseEncoder {
     throw new Error("EXISTS encoder is not implemented");
   }
 
-  echo(values: string[]): string {
+  echo(values: string): string {
     throw new Error("ECHO encoder is not implemented");
   }
 
@@ -49,12 +49,12 @@ class Encoder extends BaseEncoder {
     return ":1\r\n";
   }
 
-  override echo(values: string[]): string {
-    return values.map((value) => `${value.length}\r\n${value}`).join();
+  override echo(value: string): string {
+    return this.get(value);
   }
 
   override error(): string {
-      return "-ERR unknown command\r\n"
+    return "-ERR unknown command\r\n";
   }
 }
 
