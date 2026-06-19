@@ -7,4 +7,5 @@ export type Command =
   | "exists"
   | "incr"
   | "keys"
-  | "expire";
+  | "expire"
+  | "ttl";

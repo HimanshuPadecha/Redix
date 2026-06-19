@@ -8,6 +8,7 @@ import { encoder } from "../core/encoder";
 import { incr } from "./incr";
 import { keys } from "./keys";
 import { expire } from "./expire";
+import { ttl } from "./ttl";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -62,6 +63,11 @@ export const commandDispatcher = (
 
     case "expire": {
       expire(socket, args);
+      break;
+    }
+
+    case "ttl": {
+      ttl(socket, args);
       break;
     }
 

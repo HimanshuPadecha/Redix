@@ -38,6 +38,10 @@ class BaseEncoder {
   expires(): string {
     throw new Error("EXPIRES encoder is not implemented");
   }
+
+  ttl(value: number): string {
+    throw new Error("TTL encoder is not implemented ");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -84,6 +88,10 @@ class Encoder extends BaseEncoder {
 
   override expires(): string {
     return ":1\r\n";
+  }
+
+  override ttl(value: number): string {
+    return `:${value}\r\n`;
   }
 }
 
