@@ -1,27 +1,29 @@
 import type { Socket } from "node:net";
 import { memory } from "../memory";
-import { writeToTerminal } from "../utils";
 import { writeCommandInAOF } from "../persistence/utils";
+import { encoder } from "../core/encoder";
 
 export const del = (socket: Socket, args: string[]) => {
   if (!args || args.length > 1) {
-    writeToTerminal(socket, "Provide proper key !");
+    socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
   const [key] = args;
 
   if (!key || key === undefined) {
-    writeToTerminal(socket, "Cannot get key !");
+    socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
   if (!memory.has(key)) {
-    writeToTerminal(socket, "Does not exist !");
+    socket.write(":0\r\n");
     return;
   }
 
   memory.delete(key);
+
   writeCommandInAOF(`del ${key}`);
-  writeToTerminal(socket, "Deleted !!");
+
+  socket.write(encoder.del());
 };

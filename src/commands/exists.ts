@@ -1,24 +1,24 @@
 import type { Socket } from "node:net";
-import { writeToTerminal } from "../utils";
 import { memory } from "../memory";
+import { encoder } from "../core/encoder";
 
 export const exists = (socket: Socket, args: string[]) => {
   if (!args || args.length > 1) {
-    writeToTerminal(socket, "Provide proper key !");
+    socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
   const [key] = args;
 
   if (!key || key === undefined) {
-    writeToTerminal(socket, "Cannot get key !");
+    socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
   if (!memory.has(key)) {
-    writeToTerminal(socket, "Does not exists !");
+    socket.write(":0\r\n");
     return;
   }
 
-  writeToTerminal(socket, "Exists !");
+  socket.write(encoder.exists());
 };

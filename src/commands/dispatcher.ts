@@ -1,27 +1,24 @@
 import type { Socket } from "node:net";
 import type { Command } from "../types";
-import { writeNewline, writeToTerminal } from "../utils";
 import { set } from "./set";
 import { get } from "./get";
 import { del } from "./del";
 import { exists } from "./exists";
+import { encoder } from "../core/encoder";
 
 export const commandDispatcher = (
   socket: Socket,
   command: Command,
   args: string[],
 ) => {
-
-
   switch (command) {
     case "ping": {
-      writeToTerminal(socket, "pong");
+      socket.write(encoder.ping());
       break;
     }
 
     case "echo": {
-      socket.write(args.join(" ") + "\n");
-      writeNewline(socket);
+      socket.write(encoder.echo(args));
       break;
     }
 
@@ -45,13 +42,8 @@ export const commandDispatcher = (
       break;
     }
 
-    case "exit": {
-      socket.destroy();
-      break;
-    }
-
     default: {
-      writeToTerminal(socket, "Unknown command.");
+      socket.write(encoder.error())
     }
   }
 };

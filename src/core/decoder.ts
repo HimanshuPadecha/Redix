@@ -1,4 +1,4 @@
-export const parser = (
+export const decoder = (
   buffer: Buffer,
 ): { command: string; charsprocessed: number } | null => {
   const token = buffer.toString();

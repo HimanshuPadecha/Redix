@@ -1,8 +1,8 @@
 import net from "node:net";
-import type { Command } from "./types";
 import { commandDispatcher } from "./commands/dispatcher";
+import { decoder } from "./core/decoder";
 import { populateOldDataInAOF } from "./persistence/utils";
-import { parser } from "./parser";
+import type { Command } from "./types";
 
 populateOldDataInAOF();
 
@@ -18,7 +18,7 @@ const server = net.createServer((socket) => {
     const dataBuffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
     pendingBuffer = Buffer.concat([pendingBuffer, dataBuffer]);
 
-    const parsed = parser(pendingBuffer);
+    const parsed = decoder(pendingBuffer);
 
     if (parsed === null) {
       console.log("Cannot parse the command yet");
@@ -27,7 +27,7 @@ const server = net.createServer((socket) => {
 
     const { charsprocessed, command: fullCommand } = parsed;
 
-    pendingBuffer = pendingBuffer.subarray(charsprocessed, -1);
+    pendingBuffer = pendingBuffer.subarray(charsprocessed);
 
     const [command, ...args] = fullCommand.split(" ");
 

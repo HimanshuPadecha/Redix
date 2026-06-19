@@ -1,32 +1,32 @@
 import type { Socket } from "node:net";
-import { writeToTerminal } from "../utils";
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
+import { encoder } from "../core/encoder";
 
 export const set = (socket: Socket, args: string[]) => {
   if (!args) {
-    writeToTerminal(socket, "Provide key and values..");
+    socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
   if (args.length !== 2) {
-    writeToTerminal(socket, "Make sure you provide key and value properly.");
+    socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
   const [key, value] = args;
 
   if (!key) {
-    writeToTerminal(socket, "Unable to get key.");
+    socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
   if (!value) {
-    writeToTerminal(socket, "Unable to get value.");
+    socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
   memory.set(key, value);
   writeCommandInAOF(`set ${key} ${value}`);
-  writeToTerminal(socket, "Key added !");
+  socket.write(encoder.set());
 };

@@ -1,1 +1,1 @@
-export type Command = "ping" | "echo" | "set" | "get" | "del" | "exit" | "exists";
+export type Command = "ping" | "echo" | "set" | "get" | "del" |  "exists";
