@@ -7,6 +7,7 @@ import { exists } from "./exists";
 import { encoder } from "../core/encoder";
 import { incr } from "./incr";
 import { keys } from "./keys";
+import { expire } from "./expire";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -56,6 +57,11 @@ export const commandDispatcher = (
 
     case "keys": {
       keys(socket, args);
+      break;
+    }
+
+    case "expire": {
+      expire(socket, args);
       break;
     }
 

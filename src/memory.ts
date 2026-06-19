@@ -1,3 +1,3 @@
-const memory = new Map<string, string>();
+const memory = new Map<string, { value: string; expiresAt?: number }>();
 
 export { memory };

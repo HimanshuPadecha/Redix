@@ -22,7 +22,7 @@ export const get = (socket: Socket, args: string[]) => {
 
   const value = memory.get(key)
 
-  const encoded = encoder.get(value!)
+  const encoded = encoder.get(value?.value!)
 
   socket.write(encoded)
 };

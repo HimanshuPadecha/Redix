@@ -34,6 +34,10 @@ class BaseEncoder {
   keys(keys: string[]): string {
     throw new Error("KEYS encoder is not implemented");
   }
+
+  expires(): string {
+    throw new Error("EXPIRES encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -73,9 +77,13 @@ class Encoder extends BaseEncoder {
     const encodedkeys = keys.map((key) => `$${key.length}\r\n${key}`);
 
     encodedkeys.unshift(String(`*${keys.length}`));
-    encodedkeys.push("")
+    encodedkeys.push("");
 
     return encodedkeys.join("\r\n");
+  }
+
+  override expires(): string {
+    return ":1\r\n";
   }
 }
 

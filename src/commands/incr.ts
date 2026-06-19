@@ -17,17 +17,17 @@ export const incr = (socket: Socket, args: string[]) => {
   }
 
   if (!memory.has(key)) {
-    memory.set(key, "0");
+    memory.set(key, { value: "0" });
   }
 
-  const current = parseInt(memory.get(key)!);
+  const current = parseInt(memory.get(key)!.value!);
 
   if (Number.isNaN(current)) {
     socket.write("-ERR not an integer\r\n");
     return;
   }
 
-  memory.set(key, String(current + 1));
+  memory.set(key, {value : String(current + 1)});
   writeCommandInAOF(`incr ${key}`);
 
   socket.write(encoder.incr(current + 1));

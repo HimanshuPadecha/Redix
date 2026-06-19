@@ -1,9 +1,8 @@
 import type { Socket } from "node:net";
 import { memory } from "../memory";
-import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
 
-export const set = (socket: Socket, args: string[]) => {
+export const expire = (socket: Socket, args: string[]) => {
   if (!args) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
@@ -14,19 +13,34 @@ export const set = (socket: Socket, args: string[]) => {
     return;
   }
 
-  const [key, value] = args;
+  const [key, ttl] = args;
 
   if (!key) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
-  if (!value) {
+  if (!ttl) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
   }
 
-  memory.set(key, { value });
-  writeCommandInAOF(`set ${key} ${value}`);
-  socket.write(encoder.set());
+  if (Number.isNaN(parseInt(ttl))) {
+    socket.write("-ERR Invalid time to live\r\n");
+    return;
+  }
+
+  const current = memory.get(key);
+
+  if (!current) {
+    socket.write(":0\r\n");
+    return;
+  }
+
+  memory.set(key, {
+    value: current.value,
+    expiresAt: Date.now() + parseInt(ttl),
+  });
+
+  socket.write(encoder.expires());
 };
