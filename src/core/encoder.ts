@@ -50,6 +50,10 @@ class BaseEncoder {
   llen(len: number): string {
     throw new Error("LLEN encoder is not implemented");
   }
+
+  pop(value: string): string {
+    throw new Error("POP encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -108,6 +112,10 @@ class Encoder extends BaseEncoder {
 
   override llen(len: number): string {
     return `:${len}\r\n`;
+  }
+
+  override pop(value: string): string {
+    return `$${value.length}\r\n${value}\r\n`;
   }
 }
 

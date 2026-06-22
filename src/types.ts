@@ -11,4 +11,6 @@ export type Command =
   | "ttl"
   | "lpush"
   | "rpush"
-  | "llen";
+  | "llen"
+  | "lpop"
+  | "rpop";

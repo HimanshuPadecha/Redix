@@ -44,13 +44,13 @@ export const populateOldDataInAOF = () => {
         value: { value: String(current + 1), type: "string" },
       });
     } else if (key === "lpush" || key === "rpush") {
-      const key = args.shift();
+      const memoryKey = args.shift();
 
-      if (!memory.has(key!)) {
+      if (!memory.has(memoryKey!)) {
         memory.set(key!, { value: { value: [], type: "list" } });
       }
 
-      const current = memory.get(key!);
+      const current = memory.get(memoryKey!);
 
       if (current!.value.type === "string") {
         return;
@@ -62,6 +62,21 @@ export const populateOldDataInAOF = () => {
         current!.value.value.unshift(value!);
       } else if (key === "rpush") {
         current!.value.value.push(value!);
+      }
+    } else if (key === "lpop" || key === "rpop") {
+      const memoryKey = args.shift();
+
+      const current = memory.get(memoryKey!);
+
+      if (!current || current.value.type === "string") {
+        console.log("does not exits");
+        return;
+      }
+
+      if (key === "lpop") {
+        current.value.value.shift();
+      } else if (key === "rpop") {
+        current.value.value.pop();
       }
     }
   });

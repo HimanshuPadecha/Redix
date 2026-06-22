@@ -11,6 +11,7 @@ import { expire } from "./expire";
 import { ttl } from "./ttl";
 import { push } from "./lpush";
 import { llen } from "./llen";
+import { pop } from "./pop";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -85,6 +86,16 @@ export const commandDispatcher = (
 
     case "llen": {
       llen(socket, args);
+      break;
+    }
+
+    case "lpop": {
+      pop(socket, args, "left");
+      break;
+    }
+
+    case "rpop": {
+      pop(socket, args, "right");
       break;
     }
 
