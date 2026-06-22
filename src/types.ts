@@ -9,4 +9,5 @@ export type Command =
   | "keys"
   | "expire"
   | "ttl"
-  | "lpush";
+  | "lpush"
+  | "rpush";

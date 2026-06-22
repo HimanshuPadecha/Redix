@@ -3,7 +3,7 @@ import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
 
-export const lpush = (socket: Socket, args: string[]) => {
+export const push = (socket: Socket, args: string[], at: "left" | "right") => {
   if (!args || args.length !== 2) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
@@ -36,8 +36,17 @@ export const lpush = (socket: Socket, args: string[]) => {
     return;
   }
 
-  current!.value.value.unshift(value);
-  writeCommandInAOF(`lpush ${key} ${value}`);
+  if (at === "left") {
+
+    current!.value.value.unshift(value);
+    writeCommandInAOF(`lpush ${key} ${value}`);
+
+  } else if (at === "right") {
+    
+    current!.value.value.push(value);
+    writeCommandInAOF(`rpush ${key} ${value}`);
+
+  }
 
   socket.write(encoder.lpush(current!.value.value.length));
 };

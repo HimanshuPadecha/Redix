@@ -43,7 +43,7 @@ export const populateOldDataInAOF = () => {
       memory.set(key!, {
         value: { value: String(current + 1), type: "string" },
       });
-    } else if (key === "lpush") {
+    } else if (key === "lpush" || key === "rpush") {
       const key = args.shift();
 
       if (!memory.has(key!)) {
@@ -58,7 +58,11 @@ export const populateOldDataInAOF = () => {
 
       const value = args.shift();
 
-      current?.value.value.unshift(value!);
+      if (key === "lpush") {
+        current!.value.value.unshift(value!);
+      } else if (key === "rpush") {
+        current!.value.value.push(value!);
+      }
     }
   });
 

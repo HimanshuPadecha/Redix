@@ -9,7 +9,7 @@ import { incr } from "./incr";
 import { keys } from "./keys";
 import { expire } from "./expire";
 import { ttl } from "./ttl";
-import { lpush } from "./lpush";
+import { push } from "./lpush";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -73,7 +73,12 @@ export const commandDispatcher = (
     }
 
     case "lpush": {
-      lpush(socket, args);
+      push(socket, args, "left");
+      break;
+    }
+
+    case "rpush": {
+      push(socket, args, "right");
       break;
     }
 
