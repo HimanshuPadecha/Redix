@@ -26,7 +26,10 @@ export const set = (socket: Socket, args: string[]) => {
     return;
   }
 
-  const current: { value: string; expiresAt?: number } = { value };
+  const current: {
+    value: { type: "string"; value: string };
+    expiresAt?: number;
+  } = { value: { type: "string", value } };
 
   if (arg && seconds) {
     if (Number.isNaN(parseInt(seconds))) {
@@ -39,10 +42,7 @@ export const set = (socket: Socket, args: string[]) => {
 
   memory.set(key, current);
 
-  console.log(current);
-
-  console.log(memory);
-  
   writeCommandInAOF(`set ${key} ${value}`);
+  
   socket.write(encoder.set());
 };

@@ -32,7 +32,14 @@ export const get = (socket: Socket, args: string[]) => {
     return;
   }
 
-  const encoded = encoder.get(value.value);
+  if (actualVal.type === "list") {
+    socket.write(
+      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
+    );
+    return;
+  }
+
+  const encoded = encoder.get(actualVal.value);
 
   socket.write(encoded);
 };

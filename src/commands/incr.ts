@@ -17,17 +17,26 @@ export const incr = (socket: Socket, args: string[]) => {
   }
 
   if (!memory.has(key)) {
-    memory.set(key, { value: "0" });
+    memory.set(key, { value: { type: "string", value: "0" } });
   }
 
-  const current = parseInt(memory.get(key)!.value!);
+  const val = memory.get(key);
+
+  if (val!.value.type === "list") {
+    socket.write(
+      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
+    );
+    return;
+  }
+
+  const current = parseInt(val?.value.value!);
 
   if (Number.isNaN(current)) {
     socket.write("-ERR not an integer\r\n");
     return;
   }
 
-  memory.set(key, {value : String(current + 1)});
+  memory.set(key, { value: { value: String(current + 1), type: "string" } });
   writeCommandInAOF(`incr ${key}`);
 
   socket.write(encoder.incr(current + 1));

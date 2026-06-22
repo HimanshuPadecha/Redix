@@ -19,28 +19,35 @@ export const populateOldDataInAOF = () => {
   const commands = content.split("\n");
 
   commands.forEach((command) => {
-    
     const [key, ...args] = command.split(" ");
 
     if (key === "set" && args.length === 2) {
 
-      memory.set(args[0]!, { value: args[1]! });
+      memory.set(args[0]!, { value: { value: args[1]!, type: "string" } });
 
     } else if (key === "del") {
 
       memory.delete(args[0]!);
 
     } else if (key === "incr") {
-
+      
       const key = args.shift();
 
       if (!memory.has(key!)) {
-        memory.set(key!, { value: "0" });
+        memory.set(key!, { value: { value: "0", type: "string" } });
       }
 
-      const current = parseInt(memory.get(key!)!.value!);
+      const val = memory.get(key!);
 
-      memory.set(key!, {value : String(current + 1)});
+      if (val!.value.type === "list") {
+        return;
+      }
+
+      const current = parseInt(val!.value.value!);
+
+      memory.set(key!, {
+        value: { value: String(current + 1), type: "string" },
+      });
     }
   });
 
