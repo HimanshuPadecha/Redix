@@ -38,6 +38,11 @@ export const set = (socket: Socket, args: string[]) => {
   }
 
   memory.set(key, current);
+
+  console.log(current);
+
+  console.log(memory);
+  
   writeCommandInAOF(`set ${key} ${value}`);
   socket.write(encoder.set());
 };

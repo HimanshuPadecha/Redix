@@ -1,6 +1,7 @@
 import type { Socket } from "node:net";
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
+import { writeCommandInAOF } from "../persistence/utils";
 
 export const get = (socket: Socket, args: string[]) => {
   if (!args || args.length > 1) {
@@ -19,6 +20,15 @@ export const get = (socket: Socket, args: string[]) => {
 
   if (!value) {
     socket.write(":-1\r\n");
+    return;
+  }
+
+  const { value: actualVal, expiresAt } = value;
+
+  if (expiresAt && expiresAt < Date.now()) {
+    writeCommandInAOF(`del ${key}`);
+    memory.delete(key);
+    socket.write(":-2\r\n");
     return;
   }
 
