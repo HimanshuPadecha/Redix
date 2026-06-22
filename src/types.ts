@@ -8,4 +8,5 @@ export type Command =
   | "incr"
   | "keys"
   | "expire"
-  | "ttl";
+  | "ttl"
+  | "lpush";

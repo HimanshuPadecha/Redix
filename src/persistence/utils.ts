@@ -22,15 +22,10 @@ export const populateOldDataInAOF = () => {
     const [key, ...args] = command.split(" ");
 
     if (key === "set" && args.length === 2) {
-
       memory.set(args[0]!, { value: { value: args[1]!, type: "string" } });
-
     } else if (key === "del") {
-
       memory.delete(args[0]!);
-
     } else if (key === "incr") {
-      
       const key = args.shift();
 
       if (!memory.has(key!)) {
@@ -48,6 +43,22 @@ export const populateOldDataInAOF = () => {
       memory.set(key!, {
         value: { value: String(current + 1), type: "string" },
       });
+    } else if (key === "lpush") {
+      const key = args.shift();
+
+      if (!memory.has(key!)) {
+        memory.set(key!, { value: { value: [], type: "list" } });
+      }
+
+      const current = memory.get(key!);
+
+      if (current!.value.type === "string") {
+        return;
+      }
+
+      const value = args.shift();
+
+      current?.value.value.unshift(value!);
     }
   });
 

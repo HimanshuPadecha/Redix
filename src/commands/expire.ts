@@ -32,7 +32,5 @@ export const expire = (socket: Socket, args: string[]) => {
     expiresAt: Date.now() + parseInt(seconds) * 1000,
   });
 
-  console.log(memory.get(key));
-
   socket.write(encoder.expires());
 };

@@ -42,6 +42,10 @@ class BaseEncoder {
   ttl(value: number): string {
     throw new Error("TTL encoder is not implemented ");
   }
+
+  lpush(len: number): string {
+    throw new Error("LPUSH encode is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -92,6 +96,10 @@ class Encoder extends BaseEncoder {
 
   override ttl(value: number): string {
     return `:${value}\r\n`;
+  }
+
+  override lpush(len: number): string {
+    return `:${len}\r\n`;
   }
 }
 
