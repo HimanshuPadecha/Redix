@@ -10,6 +10,7 @@ import { keys } from "./keys";
 import { expire } from "./expire";
 import { ttl } from "./ttl";
 import { push } from "./lpush";
+import { llen } from "./llen";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -79,6 +80,11 @@ export const commandDispatcher = (
 
     case "rpush": {
       push(socket, args, "right");
+      break;
+    }
+
+    case "llen": {
+      llen(socket, args);
       break;
     }
 

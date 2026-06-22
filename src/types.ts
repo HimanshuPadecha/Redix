@@ -10,4 +10,5 @@ export type Command =
   | "expire"
   | "ttl"
   | "lpush"
-  | "rpush";
+  | "rpush"
+  | "llen";

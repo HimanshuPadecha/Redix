@@ -44,7 +44,11 @@ class BaseEncoder {
   }
 
   lpush(len: number): string {
-    throw new Error("LPUSH encode is not implemented");
+    throw new Error("LPUSH encoder is not implemented");
+  }
+
+  llen(len: number): string {
+    throw new Error("LLEN encoder is not implemented");
   }
 }
 
@@ -99,6 +103,10 @@ class Encoder extends BaseEncoder {
   }
 
   override lpush(len: number): string {
+    return `:${len}\r\n`;
+  }
+
+  override llen(len: number): string {
     return `:${len}\r\n`;
   }
 }
