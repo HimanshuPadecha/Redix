@@ -152,7 +152,7 @@ class Encoder extends BaseEncoder {
   }
 
   override hset(result: number): string {
-    return `${result}\r\n`;
+    return `:${result}\r\n`;
   }
 
   override hget(value: string): string {

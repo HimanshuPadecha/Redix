@@ -90,11 +90,11 @@ export const populateOldDataInAOF = () => {
         return;
       }
 
-      const current = memory.get(memoryKey);
-
-      if (!current) {
-        memory.set(memoryKey, { value: { type: "hash", value: {} } });
+      if (!memory.has(key)) {
+        memory.set(key, { value: { type: "hash", value: {} } });
       }
+
+      const current = memory.get(memoryKey);
 
       if (current!.value.type === "string" || current!.value.type === "list") {
         console.log("invalid type found");
@@ -110,20 +110,20 @@ export const populateOldDataInAOF = () => {
         return;
       }
 
-      const current = memory.get(memoryKey)
+      const current = memory.get(memoryKey);
 
-      if(!current){
-        return
+      if (!current) {
+        return;
       }
 
-      if(current.value.type === "string" || current.value.type === "list"){
-        return
+      if (current.value.type === "string" || current.value.type === "list") {
+        return;
       }
 
-      delete current.value.value[hkey]
+      delete current.value.value[hkey];
 
-      if(Object.entries(current.value.value).length === 0){
-        memory.delete(key)
+      if (Object.entries(current.value.value).length === 0) {
+        memory.delete(key);
       }
     }
   });

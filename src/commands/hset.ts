@@ -16,11 +16,11 @@ export const hset = (socket: Socket, args: string[]) => {
     return;
   }
 
-  const currnet = memory.get(key);
-
-  if (!currnet) {
+  if (!memory.has(key)) {
     memory.set(key, { value: { type: "hash", value: {} } });
   }
+
+  const currnet = memory.get(key);
 
   if (currnet!.value.type === "string" || currnet!.value.type === "list") {
     socket.write(
@@ -29,6 +29,8 @@ export const hset = (socket: Socket, args: string[]) => {
     return;
   }
 
+  console.log(currnet);
+
   if (Object.hasOwn(currnet!.value.value, hkey)) {
     socket.write(encoder.hset(0));
   } else {
@@ -36,5 +38,8 @@ export const hset = (socket: Socket, args: string[]) => {
   }
 
   currnet!.value.value[hkey] = hvalue;
+
+  console.log(currnet);
+  
   writeCommandInAOF(`hset ${key} ${hkey} ${hvalue}`);
 };
