@@ -13,6 +13,7 @@ import { push } from "./lpush";
 import { llen } from "./llen";
 import { pop } from "./pop";
 import { lrange } from "./lrange";
+import { hset } from "./hset";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -102,6 +103,11 @@ export const commandDispatcher = (
 
     case "lrange": {
       lrange(socket, args);
+      break;
+    }
+
+    case "hset": {
+      hset(socket, args);
       break;
     }
 

@@ -58,6 +58,10 @@ class BaseEncoder {
   lrange(sliced: string[]): string {
     throw new Error("LRANGE encoder is not implemented");
   }
+
+  hset(result: number): string {
+    throw new Error("HSET encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -127,8 +131,12 @@ class Encoder extends BaseEncoder {
 
     modified.unshift(`*${sliced.length}`);
     modified.push("");
-    
+
     return modified.join("\r\n");
+  }
+
+  override hset(result: number): string {
+    return `${result}\r\n`;
   }
 }
 

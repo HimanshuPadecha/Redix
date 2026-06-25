@@ -82,6 +82,26 @@ export const populateOldDataInAOF = () => {
       } else if (key === "rpop") {
         current.value.value.pop();
       }
+    } else if (key === "hset") {
+      const [memoryKey, hkey, hvalue] = args;
+
+      if (!memoryKey || !hkey || hvalue) {
+        console.log("value not found");
+        return;
+      }
+
+      const current = memory.get(memoryKey);
+
+      if (!current) {
+        memory.set(memoryKey, { value: { type: "hash", value: {} } });
+      }
+
+      if (current!.value.type === "string" || current!.value.type === "list") {
+        console.log("invalid type found");
+        return;
+      }
+
+      current!.value.value[hkey] = hvalue!;
     }
   });
 
