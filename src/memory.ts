@@ -3,7 +3,8 @@ const memory = new Map<
   {
     value:
       | { type: "string"; value: string }
-      | { type: "list"; value: string[] };
+      | { type: "list"; value: string[] }
+      | { type: "hash"; value: Record<string, string> };
     expiresAt?: number;
   }
 >();

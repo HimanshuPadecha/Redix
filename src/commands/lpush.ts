@@ -29,7 +29,7 @@ export const push = (socket: Socket, args: string[], at: "left" | "right") => {
     return;
   }
 
-  if (current!.value.type === "string") {
+  if (current!.value.type === "string" || current!.value.type === "hash") {
     socket.write(
       "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
     );

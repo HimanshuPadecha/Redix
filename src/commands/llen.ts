@@ -22,7 +22,7 @@ export const llen = (socket: Socket, args: string[]) => {
     return;
   }
 
-  if (currnet.value.type === "string") {
+  if (currnet.value.type === "string" || currnet.value.type === "hash") {
     socket.write(
       "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
     );
