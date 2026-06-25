@@ -37,6 +37,10 @@ export const srem = (socket: Socket, args: string[]) => {
     return;
   }
 
+  if (currnet.value.value.size === 0) {
+    memory.delete(key);
+  }
+
   writeCommandInAOF(`srem ${key} ${value}`);
   socket.write(encoder.srem());
 };

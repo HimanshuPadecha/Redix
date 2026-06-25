@@ -155,6 +155,10 @@ export const populateOldDataInAOF = () => {
       }
 
       currnet.value.value.delete(value);
+
+      if (currnet.value.value.size === 0) {
+        memory.delete(memoryKey);
+      }
     }
   });
 

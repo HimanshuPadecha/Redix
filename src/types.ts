@@ -22,4 +22,5 @@ export type Command =
   | "hgetall"
   | "sadd"
   | "srem"
-  | "sismember";
+  | "sismember"
+  | "smembers";

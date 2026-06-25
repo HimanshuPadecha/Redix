@@ -90,6 +90,10 @@ class BaseEncoder {
   sismember(): string {
     throw new Error("SISMEMBER encoder is not implmented");
   }
+
+  smembers(values: string[]): string {
+    throw new Error("SMEMBERS encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -193,6 +197,10 @@ class Encoder extends BaseEncoder {
 
   override sismember(): string {
     return `:1\r\n`;
+  }
+
+  override smembers(values: string[]): string {
+    return this.lrange(values);
   }
 }
 

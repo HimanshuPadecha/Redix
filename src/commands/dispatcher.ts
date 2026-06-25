@@ -21,6 +21,7 @@ import { hgetall } from "./hgetall";
 import { sadd } from "./sadd";
 import { srem } from "./srem";
 import { sismember } from "./sismember";
+import { smembers } from "./smembers";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -150,6 +151,11 @@ export const commandDispatcher = (
 
     case "sismember": {
       sismember(socket, args);
+      break;
+    }
+
+    case "smembers": {
+      smembers(socket, args);
       break;
     }
 
