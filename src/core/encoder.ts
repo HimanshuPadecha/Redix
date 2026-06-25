@@ -123,9 +123,11 @@ class Encoder extends BaseEncoder {
   }
 
   override lrange(sliced: string[]): string {
-    const modified = sliced.map((item) => `${item.length}\r\n${item}`);
-    modified.push("");
+    const modified = sliced.map((item) => `$${item.length}\r\n${item}`);
 
+    modified.unshift(`*${sliced.length}`);
+    modified.push("");
+    
     return modified.join("\r\n");
   }
 }

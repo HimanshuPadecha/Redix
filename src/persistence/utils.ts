@@ -47,7 +47,7 @@ export const populateOldDataInAOF = () => {
       const memoryKey = args.shift();
 
       if (!memory.has(memoryKey!)) {
-        memory.set(key!, { value: { value: [], type: "list" } });
+        memory.set(memoryKey!, { value: { value: [], type: "list" } });
       }
 
       const current = memory.get(memoryKey!);

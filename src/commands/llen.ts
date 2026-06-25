@@ -1,5 +1,6 @@
 import type { Socket } from "node:net";
 import { memory } from "../memory";
+import { encoder } from "../core/encoder";
 
 export const llen = (socket: Socket, args: string[]) => {
   if (!args || args.length !== 1) {
@@ -28,5 +29,5 @@ export const llen = (socket: Socket, args: string[]) => {
     return;
   }
 
-  
+  socket.write(encoder.llen(currnet.value.value.length));
 };

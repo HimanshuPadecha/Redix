@@ -43,5 +43,7 @@ export const lrange = (socket: Socket, args: string[]) => {
 
   const sliced = current.value.value.slice(parseInt(start), parseInt(end));
 
+  console.log(sliced);
+
   socket.write(encoder.lrange(sliced));
 };
