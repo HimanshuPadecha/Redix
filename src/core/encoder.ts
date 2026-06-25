@@ -86,6 +86,10 @@ class BaseEncoder {
   srem(): string {
     throw new Error("SREM encoder is not implemented");
   }
+
+  sismember(): string {
+    throw new Error("SISMEMBER encoder is not implmented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -184,6 +188,10 @@ class Encoder extends BaseEncoder {
   }
 
   override srem(): string {
+    return `:1\r\n`;
+  }
+
+  override sismember(): string {
     return `:1\r\n`;
   }
 }

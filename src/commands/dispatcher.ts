@@ -20,6 +20,7 @@ import { hdel } from "./hdel";
 import { hgetall } from "./hgetall";
 import { sadd } from "./sadd";
 import { srem } from "./srem";
+import { sismember } from "./sismember";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -144,6 +145,11 @@ export const commandDispatcher = (
 
     case "srem": {
       srem(socket, args);
+      break;
+    }
+
+    case "sismember": {
+      sismember(socket, args);
       break;
     }
 
