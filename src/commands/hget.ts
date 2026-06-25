@@ -22,7 +22,7 @@ export const hget = (socket: Socket, args: string[]) => {
     return;
   }
 
-  if (current.value.type === "string" || current.value.type === "list") {
+  if (current.value.type !== "hash") {
     socket.write(
       "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
     );

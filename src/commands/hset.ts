@@ -22,7 +22,7 @@ export const hset = (socket: Socket, args: string[]) => {
 
   const currnet = memory.get(key);
 
-  if (currnet!.value.type === "string" || currnet!.value.type === "list") {
+  if (currnet!.value.type !== "hash") {
     socket.write(
       "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
     );

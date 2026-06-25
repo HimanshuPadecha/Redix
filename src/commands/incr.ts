@@ -22,7 +22,7 @@ export const incr = (socket: Socket, args: string[]) => {
 
   const val = memory.get(key);
 
-  if (val!.value.type === "list" || val!.value.type === "hash") {
+  if (val!.value.type !== "string") {
     socket.write(
       "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
     );

@@ -4,7 +4,8 @@ const memory = new Map<
     value:
       | { type: "string"; value: string }
       | { type: "list"; value: string[] }
-      | { type: "hash"; value: Record<string, string> };
+      | { type: "hash"; value: Record<string, string> }
+      | { type: "set"; value: Set<string> };
     expiresAt?: number;
   }
 >();

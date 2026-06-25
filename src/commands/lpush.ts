@@ -29,7 +29,7 @@ export const push = (socket: Socket, args: string[], at: "left" | "right") => {
     return;
   }
 
-  if (current!.value.type === "string" || current!.value.type === "hash") {
+  if (current!.value.type !== "list") {
     socket.write(
       "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
     );
@@ -37,15 +37,11 @@ export const push = (socket: Socket, args: string[], at: "left" | "right") => {
   }
 
   if (at === "left") {
-
     current!.value.value.unshift(value);
     writeCommandInAOF(`lpush ${key} ${value}`);
-
   } else if (at === "right") {
-    
     current!.value.value.push(value);
     writeCommandInAOF(`rpush ${key} ${value}`);
-
   }
 
   socket.write(encoder.lpush(current!.value.value.length));

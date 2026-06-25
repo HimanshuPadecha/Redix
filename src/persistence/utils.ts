@@ -34,7 +34,7 @@ export const populateOldDataInAOF = () => {
 
       const val = memory.get(key!);
 
-      if (val!.value.type === "list" || val!.value.type === "hash") {
+      if (val!.value.type !== "string") {
         return;
       }
 
@@ -52,7 +52,7 @@ export const populateOldDataInAOF = () => {
 
       const current = memory.get(memoryKey!);
 
-      if (current!.value.type === "string" || current!.value.type === "hash") {
+      if (current!.value.type !== "list") {
         return;
       }
 
@@ -70,8 +70,7 @@ export const populateOldDataInAOF = () => {
 
       if (
         !current ||
-        current.value.type === "string" ||
-        current.value.type === "hash"
+        current.value.type !== "list"
       ) {
         console.log("does not exits");
         return;
@@ -96,7 +95,7 @@ export const populateOldDataInAOF = () => {
 
       const current = memory.get(memoryKey);
 
-      if (current!.value.type === "string" || current!.value.type === "list") {
+      if (current!.value.type !== "hash") {
         console.log("invalid type found");
         return;
       }
@@ -116,7 +115,7 @@ export const populateOldDataInAOF = () => {
         return;
       }
 
-      if (current.value.type === "string" || current.value.type === "list") {
+      if (current.value.type !== "hash") {
         return;
       }
 

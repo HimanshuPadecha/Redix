@@ -22,7 +22,7 @@ export const lrange = (socket: Socket, args: string[]) => {
     return;
   }
 
-  if (current.value.type === "string" || current.value.type === "hash") {
+  if (current.value.type !== "list") {
     socket.write(
       "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
     );

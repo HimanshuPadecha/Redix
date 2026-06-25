@@ -32,7 +32,7 @@ export const get = (socket: Socket, args: string[]) => {
     return;
   }
 
-  if (actualVal.type === "list" || actualVal.type === "hash") {
+  if (actualVal.type !== "string") {
     socket.write(
       "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
     );
