@@ -20,4 +20,5 @@ export type Command =
   | "hexists"
   | "hdel"
   | "hgetall"
-  | "sadd";
+  | "sadd"
+  | "srem";

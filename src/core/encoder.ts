@@ -82,6 +82,10 @@ class BaseEncoder {
   sadd(len: number): string {
     throw new Error("SADD encoder is not implemented");
   }
+
+  srem(): string {
+    throw new Error("SREM encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -177,6 +181,10 @@ class Encoder extends BaseEncoder {
 
   override sadd(len: number): string {
     return `:${len}\r\n`;
+  }
+
+  override srem(): string {
+    return `:1\r\n`;
   }
 }
 

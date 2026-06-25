@@ -141,6 +141,20 @@ export const populateOldDataInAOF = () => {
       for (const val of values) {
         currnet?.value.value.add(val);
       }
+    } else if (key === "srem") {
+      const [memoryKey, value] = args;
+
+      if (!memoryKey || !value) {
+        return;
+      }
+
+      const currnet = memory.get(memoryKey);
+
+      if (!currnet || currnet.value.type !== "set") {
+        return;
+      }
+
+      currnet.value.value.delete(value);
     }
   });
 

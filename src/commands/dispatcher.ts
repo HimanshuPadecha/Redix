@@ -19,6 +19,7 @@ import { hexists } from "./hexists";
 import { hdel } from "./hdel";
 import { hgetall } from "./hgetall";
 import { sadd } from "./sadd";
+import { srem } from "./srem";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -138,6 +139,11 @@ export const commandDispatcher = (
 
     case "sadd": {
       sadd(socket, args);
+      break;
+    }
+
+    case "srem": {
+      srem(socket, args);
       break;
     }
 
