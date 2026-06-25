@@ -16,4 +16,5 @@ export type Command =
   | "rpop"
   | "lrange"
   | "hset"
-  | "hget";
+  | "hget"
+  | "hexists";

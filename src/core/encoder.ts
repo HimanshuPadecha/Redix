@@ -63,8 +63,12 @@ class BaseEncoder {
     throw new Error("HSET encoder is not implemented");
   }
 
-  hget(value : string) : string {
-    throw new Error("HGET encoder is not implemented")
+  hget(value: string): string {
+    throw new Error("HGET encoder is not implemented");
+  }
+
+  hexists() : string {
+    throw new Error("HEXISTS encoder is not implemented")
   }
 }
 
@@ -144,7 +148,11 @@ class Encoder extends BaseEncoder {
   }
 
   override hget(value: string): string {
-    return `$${value.length}\r\n${value}\r\n`
+    return `$${value.length}\r\n${value}\r\n`;
+  }
+
+  override hexists(): string {
+    return `:1\r\n`
   }
 }
 
