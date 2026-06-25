@@ -23,4 +23,5 @@ export type Command =
   | "sadd"
   | "srem"
   | "sismember"
-  | "smembers";
+  | "smembers"
+  | "scard";

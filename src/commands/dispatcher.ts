@@ -22,6 +22,7 @@ import { sadd } from "./sadd";
 import { srem } from "./srem";
 import { sismember } from "./sismember";
 import { smembers } from "./smembers";
+import { scard } from "./scard";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -156,6 +157,11 @@ export const commandDispatcher = (
 
     case "smembers": {
       smembers(socket, args);
+      break;
+    }
+
+    case "scard": {
+      scard(socket, args);
       break;
     }
 

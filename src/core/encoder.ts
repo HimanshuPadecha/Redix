@@ -94,6 +94,10 @@ class BaseEncoder {
   smembers(values: string[]): string {
     throw new Error("SMEMBERS encoder is not implemented");
   }
+
+  scard(len: number): string {
+    throw new Error("SCARD encoder is not implemetned");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -201,6 +205,10 @@ class Encoder extends BaseEncoder {
 
   override smembers(values: string[]): string {
     return this.lrange(values);
+  }
+
+  override scard(len: number): string {
+    return `:${len}\r\n`;
   }
 }
 
