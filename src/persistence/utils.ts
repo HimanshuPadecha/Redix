@@ -102,6 +102,29 @@ export const populateOldDataInAOF = () => {
       }
 
       current!.value.value[hkey] = hvalue!;
+    } else if (key === "hdel") {
+      const [memoryKey, hkey] = args;
+
+      if (!memoryKey || !hkey) {
+        console.log("value not found");
+        return;
+      }
+
+      const current = memory.get(memoryKey)
+
+      if(!current){
+        return
+      }
+
+      if(current.value.type === "string" || current.value.type === "list"){
+        return
+      }
+
+      delete current.value.value[hkey]
+
+      if(Object.entries(current.value.value).length === 0){
+        memory.delete(key)
+      }
     }
   });
 

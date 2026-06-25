@@ -16,6 +16,7 @@ import { lrange } from "./lrange";
 import { hset } from "./hset";
 import { hget } from "./hget";
 import { hexists } from "./hexists";
+import { hdel } from "./hdel";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -120,6 +121,11 @@ export const commandDispatcher = (
 
     case "hexists": {
       hexists(socket, args);
+      break;
+    }
+
+    case "hdel": {
+      hdel(socket, args);
       break;
     }
 

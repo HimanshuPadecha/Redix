@@ -17,4 +17,5 @@ export type Command =
   | "lrange"
   | "hset"
   | "hget"
-  | "hexists";
+  | "hexists"
+  | "hdel";

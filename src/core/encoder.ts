@@ -67,8 +67,12 @@ class BaseEncoder {
     throw new Error("HGET encoder is not implemented");
   }
 
-  hexists() : string {
-    throw new Error("HEXISTS encoder is not implemented")
+  hexists(): string {
+    throw new Error("HEXISTS encoder is not implemented");
+  }
+
+  hdel(): string {
+    throw new Error("HDEL encoder is not implemented ");
   }
 }
 
@@ -152,7 +156,11 @@ class Encoder extends BaseEncoder {
   }
 
   override hexists(): string {
-    return `:1\r\n`
+    return `:1\r\n`;
+  }
+
+  override hdel(): string {
+    return `:1\r\n`;
   }
 }
 
