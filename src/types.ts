@@ -13,4 +13,5 @@ export type Command =
   | "rpush"
   | "llen"
   | "lpop"
-  | "rpop";
+  | "rpop"
+  | "lrange";

@@ -12,6 +12,7 @@ import { ttl } from "./ttl";
 import { push } from "./lpush";
 import { llen } from "./llen";
 import { pop } from "./pop";
+import { lrange } from "./lrange";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -96,6 +97,11 @@ export const commandDispatcher = (
 
     case "rpop": {
       pop(socket, args, "right");
+      break;
+    }
+
+    case "lrange": {
+      lrange(socket, args);
       break;
     }
 

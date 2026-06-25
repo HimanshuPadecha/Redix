@@ -54,6 +54,10 @@ class BaseEncoder {
   pop(value: string): string {
     throw new Error("POP encoder is not implemented");
   }
+
+  lrange(sliced: string[]): string {
+    throw new Error("LRANGE encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -116,6 +120,13 @@ class Encoder extends BaseEncoder {
 
   override pop(value: string): string {
     return `$${value.length}\r\n${value}\r\n`;
+  }
+
+  override lrange(sliced: string[]): string {
+    const modified = sliced.map((item) => `${item.length}\r\n${item}`);
+    modified.push("");
+
+    return modified.join("\r\n");
   }
 }
 
