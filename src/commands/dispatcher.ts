@@ -14,6 +14,7 @@ import { llen } from "./llen";
 import { pop } from "./pop";
 import { lrange } from "./lrange";
 import { hset } from "./hset";
+import { hget } from "./hget";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -108,6 +109,11 @@ export const commandDispatcher = (
 
     case "hset": {
       hset(socket, args);
+      break;
+    }
+
+    case "hget": {
+      hget(socket, args);
       break;
     }
 

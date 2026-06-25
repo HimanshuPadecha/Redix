@@ -62,6 +62,10 @@ class BaseEncoder {
   hset(result: number): string {
     throw new Error("HSET encoder is not implemented");
   }
+
+  hget(value : string) : string {
+    throw new Error("HGET encoder is not implemented")
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -137,6 +141,10 @@ class Encoder extends BaseEncoder {
 
   override hset(result: number): string {
     return `${result}\r\n`;
+  }
+
+  override hget(value: string): string {
+    return `$${value.length}\r\n${value}\r\n`
   }
 }
 

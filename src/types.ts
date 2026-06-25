@@ -15,4 +15,5 @@ export type Command =
   | "lpop"
   | "rpop"
   | "lrange"
-  | "hset";
+  | "hset"
+  | "hget";
