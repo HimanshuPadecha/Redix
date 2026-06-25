@@ -78,6 +78,10 @@ class BaseEncoder {
   hgetall(transformed: string[]): string {
     throw new Error("HGETALL encoder is not implemented");
   }
+
+  sadd(len: number): string {
+    throw new Error("SADD encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -169,6 +173,10 @@ class Encoder extends BaseEncoder {
 
   override hgetall(transformed: string[]): string {
     return this.lrange(transformed);
+  }
+
+  override sadd(len: number): string {
+    return `:${len}\r\n`;
   }
 }
 

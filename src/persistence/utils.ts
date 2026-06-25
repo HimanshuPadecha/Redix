@@ -68,10 +68,7 @@ export const populateOldDataInAOF = () => {
 
       const current = memory.get(memoryKey!);
 
-      if (
-        !current ||
-        current.value.type !== "list"
-      ) {
+      if (!current || current.value.type !== "list") {
         console.log("does not exits");
         return;
       }
@@ -123,6 +120,26 @@ export const populateOldDataInAOF = () => {
 
       if (Object.entries(current.value.value).length === 0) {
         memory.delete(key);
+      }
+    } else if (key === "sadd") {
+      const [memoryKey, ...values] = args;
+
+      if (!memoryKey || !values) {
+        return;
+      }
+
+      if (!memory.has(memoryKey)) {
+        memory.set(memoryKey, { value: { value: new Set(), type: "set" } });
+      }
+
+      const currnet = memory.get(key);
+
+      if (currnet!.value.type !== "set") {
+        return;
+      }
+
+      for (const val of values) {
+        currnet?.value.value.add(val);
       }
     }
   });

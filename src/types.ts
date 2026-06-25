@@ -19,4 +19,5 @@ export type Command =
   | "hget"
   | "hexists"
   | "hdel"
-  | "hgetall";
+  | "hgetall"
+  | "sadd";
