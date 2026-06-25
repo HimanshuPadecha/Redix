@@ -17,6 +17,7 @@ import { hset } from "./hset";
 import { hget } from "./hget";
 import { hexists } from "./hexists";
 import { hdel } from "./hdel";
+import { hgetall } from "./hgetall";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -126,6 +127,11 @@ export const commandDispatcher = (
 
     case "hdel": {
       hdel(socket, args);
+      break;
+    }
+
+    case "hgetall": {
+      hgetall(socket, args);
       break;
     }
 

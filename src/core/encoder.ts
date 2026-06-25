@@ -74,6 +74,10 @@ class BaseEncoder {
   hdel(): string {
     throw new Error("HDEL encoder is not implemented ");
   }
+
+  hgetall(transformed: string[]): string {
+    throw new Error("HGETALL encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -161,6 +165,10 @@ class Encoder extends BaseEncoder {
 
   override hdel(): string {
     return `:1\r\n`;
+  }
+
+  override hgetall(transformed: string[]): string {
+    return this.lrange(transformed);
   }
 }
 

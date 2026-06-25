@@ -18,4 +18,5 @@ export type Command =
   | "hset"
   | "hget"
   | "hexists"
-  | "hdel";
+  | "hdel"
+  | "hgetall";
