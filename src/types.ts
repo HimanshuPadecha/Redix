@@ -26,4 +26,5 @@ export type Command =
   | "smembers"
   | "scard"
   | "subscribe"
-  | "publish";
+  | "publish"
+  | "unsubscribe";
