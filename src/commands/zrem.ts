@@ -39,13 +39,17 @@ export const zrem = (socket: Socket, args: string[]) => {
     return;
   }
 
-  memory.set(key, {
-    value: {
-      value: current.value.value.filter((player) => player.name !== name),
-      type: "zset",
-    },
-  });
+  if (current.value.value.length === 1) {
+    memory.delete(key);
+  } else {
+    memory.set(key, {
+      value: {
+        value: current.value.value.filter((player) => player.name !== name),
+        type: "zset",
+      },
+    });
+  }
 
   writeCommandInAOF(`zrem ${key} ${name}`);
-  socket.write(encoder.zrem())
+  socket.write(encoder.zrem());
 };

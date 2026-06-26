@@ -201,14 +201,44 @@ export const populateOldDataInAOF = () => {
         return;
       }
 
-      memory.set(memoryKey, {
-        value: {
-          value: current.value.value.filter((player) => player.name !== name),
-          type: "zset",
-        },
-      });
+      if (current.value.value.length === 1) {
+        memory.delete(key);
+      } else {
+        memory.set(key, {
+          value: {
+            value: current.value.value.filter((player) => player.name !== name),
+            type: "zset",
+          },
+        });
+      }
     }
   });
 
   console.log("Old data is persisted");
+};
+
+export const indiciesValidator = (
+  start: number,
+  end: number,
+  length: number,
+): null | { start: number; end: number } => {
+  if (start < 0) {
+    start = Math.max(0, length + start);
+  }
+
+  if (end < 0) {
+    end = Math.max(0, length + end);
+  }
+
+  if (start >= length) {
+    return null;
+  }
+
+  end = Math.min(end, length - 1);
+
+  if (start > end) {
+    return null;
+  }
+
+  return { start, end };
 };

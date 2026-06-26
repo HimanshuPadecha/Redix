@@ -30,6 +30,7 @@ import { zadd } from "./zadd";
 import { zscore } from "./zscore";
 import { zcard } from "./zcard";
 import { zrem } from "./zrem";
+import { zrange } from "./zrange";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -204,6 +205,11 @@ export const commandDispatcher = (
 
     case "zrem": {
       zrem(socket, args);
+      break;
+    }
+
+    case "zrange": {
+      zrange(socket, args);
       break;
     }
 

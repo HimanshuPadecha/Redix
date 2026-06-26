@@ -126,6 +126,10 @@ class BaseEncoder {
   zrem(): string {
     throw new Error("ZREM is not implemented");
   }
+
+  zrange(processed: string[]): string {
+    throw new Error("ZRANGE is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -265,6 +269,10 @@ class Encoder extends BaseEncoder {
 
   override zrem(): string {
     return `:1\r\n`;
+  }
+
+  override zrange(processed: string[]): string {
+    return this.lrange(processed);
   }
 }
 

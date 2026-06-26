@@ -31,4 +31,5 @@ export type Command =
   | "zadd"
   | "zscore"
   | "zcard"
-  | "zrem";
+  | "zrem"
+  | "zrange";

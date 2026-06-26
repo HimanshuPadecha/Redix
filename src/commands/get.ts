@@ -4,10 +4,10 @@ import { encoder } from "../core/encoder";
 import { writeCommandInAOF } from "../persistence/utils";
 
 export const get = (socket: Socket, args: string[]) => {
-    if (!args || args.length > 1) {
-      socket.write("-ERR wrong number of arguments\r\n");
-      return;
-    }
+  if (!args || args.length > 1) {
+    socket.write("-ERR wrong number of arguments\r\n");
+    return;
+  }
 
   const [key] = args;
 
