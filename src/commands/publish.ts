@@ -24,9 +24,9 @@ export const publish = (socket: Socket, args: string[]) => {
 
   for (const socket of sockets) {
     socket.write(
-      `*3\r\n$7\r\nmessage\r\n${channel.length}\r\n${channel}\r\n${message.length}\r\n${message}\r\n`,
+      `*3\r\n$7\r\nmessage\r\n$${channel.length}\r\n${channel}\r\n$${message.length}\r\n${message}\r\n`,
     );
-
-    socket.write(encoder.publish(sockets.size));
   }
+
+  socket.write(`:${sockets.size}\r\n`);
 };
