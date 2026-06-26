@@ -38,5 +38,5 @@ export const unsubscribe = (socket: Socket, args: string[]) => {
     }
   }
 
-  socket.write(encoder.unsubscribe(channel, subsCount.get(socket)!));
+  socket.write(encoder.unsubscribe(channel, !!subsCount.get(socket) ? subsCount.get(socket)! : 0));
 };
