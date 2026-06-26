@@ -1,3 +1,10 @@
+import type { Socket } from "node:net";
+
+export interface RedisSocket extends Socket {
+  inTransaction: boolean;
+  commandQueue: string[];
+}
+
 export type Command =
   | "ping"
   | "echo"
@@ -32,4 +39,6 @@ export type Command =
   | "zscore"
   | "zcard"
   | "zrem"
-  | "zrange";
+  | "zrange"
+  | "multi"
+  | "exec";

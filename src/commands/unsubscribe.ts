@@ -1,8 +1,8 @@
-import type { Socket } from "node:net";
 import { subsCount, subscriptions } from "../pub-sub-memory";
 import { encoder } from "../core/encoder";
+import type { RedisSocket } from "../types";
 
-export const unsubscribe = (socket: Socket, args: string[]) => {
+export const unsubscribe = (socket: RedisSocket, args: string[]) => {
   if (!args || args.length !== 1) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;

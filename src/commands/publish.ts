@@ -1,8 +1,8 @@
-import type { Socket } from "node:net";
 import { subscriptions } from "../pub-sub-memory";
 import { encoder } from "../core/encoder";
+import type { RedisSocket } from "../types";
 
-export const publish = (socket: Socket, args: string[]) => {
+export const publish = (socket: RedisSocket, args: string[]) => {
   if (!args || args.length !== 2) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;

@@ -1,9 +1,9 @@
-import type { Socket } from "node:net";
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
+import type { RedisSocket } from "../types";
 
-export const zadd = (socket: Socket, args: string[]) => {
+export const zadd = (socket: RedisSocket, args: string[]) => {
   if (!args || args.length !== 3) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;

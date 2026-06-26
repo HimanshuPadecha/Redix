@@ -1,8 +1,8 @@
-import type { Socket } from "node:net";
 import { subsCount, subscriptions } from "../pub-sub-memory";
 import { encoder } from "../core/encoder";
+import type { RedisSocket } from "../types";
 
-export const subscribe = (socket: Socket, args: string[]) => {
+export const subscribe = (socket: RedisSocket, args: string[]) => {
   if (!args || args.length !== 1) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;
@@ -16,7 +16,7 @@ export const subscribe = (socket: Socket, args: string[]) => {
   }
 
   if (!subscriptions.has(channel)) {
-    subscriptions.set(channel, new Set<Socket>());
+    subscriptions.set(channel, new Set<RedisSocket>());
   }
 
   const current = subscriptions.get(channel);

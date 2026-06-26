@@ -1,8 +1,8 @@
-import type { Socket } from "node:net";
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
+import type { RedisSocket } from "../types";
 
-export const scard = (socket: Socket, args: string[]) => {
+export const scard = (socket: RedisSocket, args: string[]) => {
   if (!args || args.length !== 1) {
     socket.write("-ERR wrong number of arguments\r\n");
     return;

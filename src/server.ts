@@ -2,7 +2,7 @@ import net from "node:net";
 import { commandDispatcher } from "./commands/dispatcher";
 import { decoder } from "./core/decoder";
 import { populateOldDataInAOF } from "./persistence/utils";
-import type { Command } from "./types";
+import type { Command, RedisSocket } from "./types";
 
 populateOldDataInAOF();
 
@@ -28,7 +28,11 @@ const server = net.createServer((socket) => {
 
     const [command, ...args] = fullCommand.split(" ");
 
-    commandDispatcher(socket, command as Command, args);
+    const redisSocket = socket as RedisSocket;
+    redisSocket.inTransaction = false;
+    redisSocket.commandQueue = [];
+
+    commandDispatcher(redisSocket, command as Command, args);
   });
 
   socket.on("end", () => {

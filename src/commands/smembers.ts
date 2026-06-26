@@ -1,8 +1,8 @@
-import type { Socket } from "node:net";
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
+import type { RedisSocket } from "../types";
 
-export const smembers = (socket: Socket, args: string[]) => {
+export const smembers = (socket: RedisSocket, args: string[]) => {
   const [key] = args;
 
   if (!key) {

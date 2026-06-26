@@ -1,42 +1,51 @@
-import type { Socket } from "node:net";
-import type { Command } from "../types";
-import { set } from "./set";
-import { get } from "./get";
-import { del } from "./del";
-import { exists } from "./exists";
-import { encoder } from "../core/encoder";
-import { incr } from "./incr";
-import { keys } from "./keys";
-import { expire } from "./expire";
-import { ttl } from "./ttl";
-import { push } from "./lpush";
-import { llen } from "./llen";
-import { pop } from "./pop";
-import { lrange } from "./lrange";
-import { hset } from "./hset";
-import { hget } from "./hget";
-import { hexists } from "./hexists";
-import { hdel } from "./hdel";
-import { hgetall } from "./hgetall";
-import { sadd } from "./sadd";
-import { srem } from "./srem";
-import { sismember } from "./sismember";
-import { smembers } from "./smembers";
-import { scard } from "./scard";
-import { subscribe } from "./subscribe";
-import { publish } from "./publish";
-import { unsubscribe } from "./unsubscribe";
-import { zadd } from "./zadd";
-import { zscore } from "./zscore";
-import { zcard } from "./zcard";
-import { zrem } from "./zrem";
-import { zrange } from "./zrange";
+import type { Command, RedisSocket } from "./types";
+import {
+  del,
+  encoder,
+  exists,
+  expire,
+  get,
+  hdel,
+  hexists,
+  hget,
+  hgetall,
+  hset,
+  incr,
+  keys,
+  llen,
+  lrange,
+  pop,
+  publish,
+  push,
+  sadd,
+  scard,
+  set,
+  sismember,
+  smembers,
+  srem,
+  subscribe,
+  ttl,
+  unsubscribe,
+  zadd,
+  zcard,
+  zrange,
+  zrem,
+  zscore,
+  multi,
+  exec,
+} from "./commands";
 
 export const commandDispatcher = (
-  socket: Socket,
+  socket: RedisSocket,
   command: Command,
   args: string[],
 ) => {
+  if (socket.inTransaction && command !== "exec") {
+    socket.commandQueue.push(`${command} ${args.join(" ")}`);
+    socket.write("+QUEUED\r\n");
+    return;
+  }
+
   switch (command) {
     case "ping": {
       socket.write(encoder.ping());
@@ -210,6 +219,16 @@ export const commandDispatcher = (
 
     case "zrange": {
       zrange(socket, args);
+      break;
+    }
+
+    case "multi": {
+      multi(socket);
+      break;
+    }
+
+    case "exec": {
+      exec(socket);
       break;
     }
 
