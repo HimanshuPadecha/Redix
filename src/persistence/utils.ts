@@ -81,13 +81,13 @@ export const populateOldDataInAOF = () => {
     } else if (key === "hset") {
       const [memoryKey, hkey, hvalue] = args;
 
-      if (!memoryKey || !hkey || hvalue) {
+      if (!memoryKey || !hkey || !hvalue) {
         console.log("value not found");
         return;
       }
 
-      if (!memory.has(key)) {
-        memory.set(key, { value: { type: "hash", value: {} } });
+      if (!memory.has(memoryKey)) {
+        memory.set(memoryKey, { value: { type: "hash", value: {} } });
       }
 
       const current = memory.get(memoryKey);

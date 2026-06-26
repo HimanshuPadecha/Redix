@@ -24,6 +24,7 @@ import { sismember } from "./sismember";
 import { smembers } from "./smembers";
 import { scard } from "./scard";
 import { subscribe } from "./subscribe";
+import { publish } from "./publish";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -168,6 +169,11 @@ export const commandDispatcher = (
 
     case "subscribe": {
       subscribe(socket, args);
+      break;
+    }
+
+    case "publish": {
+      publish(socket, args);
       break;
     }
 

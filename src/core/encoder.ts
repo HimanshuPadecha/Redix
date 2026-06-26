@@ -102,6 +102,10 @@ class BaseEncoder {
   subscribe(channel: string, subscribedTo: number): string {
     throw new Error("SUBSCRIBE encoder is not implemented");
   }
+
+  publish(published: number): string {
+    throw new Error("PUBLISH encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -217,6 +221,10 @@ class Encoder extends BaseEncoder {
 
   override subscribe(channel: string, subscribedTo: number): string {
     return `*${3}\r\n$9\r\nsubscribe\r\n$${channel.length}\r\n${channel}\r\n:${subscribedTo}\r\n`;
+  }
+
+  override publish(published: number): string {
+    return `:${published}\r\n `;
   }
 }
 

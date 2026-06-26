@@ -25,4 +25,5 @@ export type Command =
   | "sismember"
   | "smembers"
   | "scard"
-  | "subscribe";
+  | "subscribe"
+  | "publish";
