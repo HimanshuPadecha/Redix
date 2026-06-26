@@ -39,7 +39,7 @@ export const zadd = (socket: Socket, args: string[]) => {
     current!.value.value.push({ name, score: parseInt(score) });
   }
 
-  current!.value.value.sort((a, b) => a.score - b.score);
+  current!.value.value.sort((a, b) => b.score - a.score);
   writeCommandInAOF(`zadd ${key} ${score} ${name}`);
 
   socket.write(encoder.zadd(exsistingPlayer ? 0 : 1));

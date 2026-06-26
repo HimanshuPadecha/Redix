@@ -114,6 +114,10 @@ class BaseEncoder {
   zadd(member: number): string {
     throw new Error("ZADD encoder is not implemented")
   }
+
+  zscore(score : number) : string {
+    throw new Error("ZSCORE is not implemented")
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -241,6 +245,10 @@ class Encoder extends BaseEncoder {
 
   override zadd(member: number): string {
     return `:${member}\r\n`
+  }
+
+  override zscore(score: number): string {
+    return `$${String(score).length}\r\n${score}\r\n`
   }
 }
 

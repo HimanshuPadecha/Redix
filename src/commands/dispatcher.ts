@@ -27,6 +27,7 @@ import { subscribe } from "./subscribe";
 import { publish } from "./publish";
 import { unsubscribe } from "./unsubscribe";
 import { zadd } from "./zadd";
+import { zscore } from "./zscore";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -186,6 +187,11 @@ export const commandDispatcher = (
 
     case "zadd": {
       zadd(socket, args);
+      break;
+    }
+
+    case "zscore": {
+      zscore(socket, args);
       break;
     }
 

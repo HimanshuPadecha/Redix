@@ -28,4 +28,5 @@ export type Command =
   | "subscribe"
   | "publish"
   | "unsubscribe"
-  | "zadd";
+  | "zadd"
+  | "zscore";
