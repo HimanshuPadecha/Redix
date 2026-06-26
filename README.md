@@ -181,8 +181,8 @@ graph TD
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/redix.git
-cd redix
+git clone https://github.com/himanshupadecha/Redix.git
+cd Redix
 
 # 2. Install dependencies
 bun install
