@@ -17,7 +17,7 @@
 
 ![Demo](./docs/assets/demo.gif)
 
-</div
+</div>
 <!-- </div> -->
 
 ---
