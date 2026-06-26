@@ -118,6 +118,10 @@ class BaseEncoder {
   zscore(score : number) : string {
     throw new Error("ZSCORE is not implemented")
   }
+
+  zcard(players : number) : string {
+    throw new Error("ZCARD is not implemented")
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -249,6 +253,10 @@ class Encoder extends BaseEncoder {
 
   override zscore(score: number): string {
     return `$${String(score).length}\r\n${score}\r\n`
+  }
+
+  override zcard(players: number): string {
+    return `:${players}\r\n`
   }
 }
 
