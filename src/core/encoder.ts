@@ -98,6 +98,10 @@ class BaseEncoder {
   scard(len: number): string {
     throw new Error("SCARD encoder is not implemetned");
   }
+
+  subscribe(channel: string, subscribedTo: number): string {
+    throw new Error("SUBSCRIBE encoder is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -209,6 +213,10 @@ class Encoder extends BaseEncoder {
 
   override scard(len: number): string {
     return `:${len}\r\n`;
+  }
+
+  override subscribe(channel: string, subscribedTo: number): string {
+    return `*${3}\r\n$9\r\nsubscribe\r\n$${channel.length}\r\n${channel}\r\n:${subscribedTo}\r\n`;
   }
 }
 

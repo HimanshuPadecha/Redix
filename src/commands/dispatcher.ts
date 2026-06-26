@@ -23,6 +23,7 @@ import { srem } from "./srem";
 import { sismember } from "./sismember";
 import { smembers } from "./smembers";
 import { scard } from "./scard";
+import { subscribe } from "./subscribe";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -162,6 +163,11 @@ export const commandDispatcher = (
 
     case "scard": {
       scard(socket, args);
+      break;
+    }
+
+    case "subscribe": {
+      subscribe(socket, args);
       break;
     }
 

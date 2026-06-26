@@ -24,4 +24,5 @@ export type Command =
   | "srem"
   | "sismember"
   | "smembers"
-  | "scard";
+  | "scard"
+  | "subscribe";
