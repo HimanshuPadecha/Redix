@@ -159,6 +159,34 @@ export const populateOldDataInAOF = () => {
       if (currnet.value.value.size === 0) {
         memory.delete(memoryKey);
       }
+    } else if (key === "zadd") {
+      const [memoryKey, score, name] = args;
+
+      if (!memoryKey || !score || !name) {
+        console.log("not found in zadd");
+        return;
+      }
+
+      if (!memory.has(memoryKey)) {
+        memory.set(memoryKey, { value: { value: [], type: "zset" } });
+      }
+
+      const current = memory.get(memoryKey);
+
+      if (current!.value.type !== "zset") {
+        console.log("invalid type");
+        return;
+      }
+
+      const alreadyPresent = current!.value.value.find(
+        (player) => player.name === name,
+      );
+
+      if (alreadyPresent) {
+        alreadyPresent.score = parseInt(score);
+      } else {
+        current!.value.value.push({ name, score: parseInt(score) });
+      }
     }
   });
 

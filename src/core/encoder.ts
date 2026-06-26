@@ -110,6 +110,10 @@ class BaseEncoder {
   unsubscribe(channel: string, subscribedTo: number): string {
     throw new Error("UNSUBSCRIBE encoder is not implemented");
   }
+
+  zadd(member: number): string {
+    throw new Error("ZADD encoder is not implemented")
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -233,6 +237,10 @@ class Encoder extends BaseEncoder {
 
   override unsubscribe(channel: string, subscribedTo: number): string {
     return `*3\r\n$11\r\nunsubscribe\r\n$${channel.length}\r\n${channel}\r\n:${subscribedTo}\r\n`;
+  }
+
+  override zadd(member: number): string {
+    return `:${member}\r\n`
   }
 }
 

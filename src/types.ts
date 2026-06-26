@@ -27,4 +27,5 @@ export type Command =
   | "scard"
   | "subscribe"
   | "publish"
-  | "unsubscribe";
+  | "unsubscribe"
+  | "zadd";

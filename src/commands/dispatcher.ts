@@ -26,6 +26,7 @@ import { scard } from "./scard";
 import { subscribe } from "./subscribe";
 import { publish } from "./publish";
 import { unsubscribe } from "./unsubscribe";
+import { zadd } from "./zadd";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -180,6 +181,11 @@ export const commandDispatcher = (
 
     case "unsubscribe": {
       unsubscribe(socket, args);
+      break;
+    }
+
+    case "zadd": {
+      zadd(socket, args);
       break;
     }
 
