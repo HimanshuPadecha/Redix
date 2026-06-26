@@ -11,6 +11,10 @@ const server = net.createServer((socket) => {
 
   let pendingBuffer = Buffer.alloc(0);
 
+  const redisSocket = socket as RedisSocket;
+  redisSocket.inTransaction = false;
+  redisSocket.commandQueue = [];
+
   socket.on("data", (data: Buffer | string) => {
     const dataBuffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
     pendingBuffer = Buffer.concat([pendingBuffer, dataBuffer]);
@@ -27,10 +31,6 @@ const server = net.createServer((socket) => {
     pendingBuffer = pendingBuffer.subarray(charsprocessed);
 
     const [command, ...args] = fullCommand.split(" ");
-
-    const redisSocket = socket as RedisSocket;
-    redisSocket.inTransaction = false;
-    redisSocket.commandQueue = [];
 
     const response = commandDispatcher(redisSocket, command as Command, args);
 

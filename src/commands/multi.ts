@@ -7,6 +7,7 @@ export const multi = (socket: RedisSocket) => {
   }
 
   socket.inTransaction = true;
+  socket.commandQueue = []
 
   return encoder.set();
 };

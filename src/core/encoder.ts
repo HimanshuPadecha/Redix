@@ -130,6 +130,10 @@ class BaseEncoder {
   zrange(processed: string[]): string {
     throw new Error("ZRANGE is not implemented");
   }
+
+  exec(responses: string[]): string {
+    throw new Error("EXEC is not implemented");
+  }
 }
 
 class Encoder extends BaseEncoder {
@@ -273,6 +277,16 @@ class Encoder extends BaseEncoder {
 
   override zrange(processed: string[]): string {
     return this.lrange(processed);
+  }
+
+  override exec(responses: string[]): string {
+    let result = `*${responses.length}\r\n`;
+
+    for (const response of responses) {
+      result += response;
+    }
+
+    return result;
   }
 }
 

@@ -41,6 +41,8 @@ export const commandDispatcher = (
   command: Command,
   args: string[],
 ): string => {
+  console.log(command + " " + socket.inTransaction);
+
   if (socket.inTransaction && command !== "exec" && command !== "discard") {
     socket.commandQueue.push(`${command} ${args.join(" ")}`);
     return "+QUEUED\r\n";

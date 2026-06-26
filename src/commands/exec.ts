@@ -9,11 +9,14 @@ export const exec = (socket: RedisSocket) => {
 
   let responses: string[] = [];
 
+  socket.inTransaction = false;
+
   for (const fullCommand of socket.commandQueue) {
+    console.log(fullCommand);
     const [command, ...args] = fullCommand.split(" ");
     responses.push(commandDispatcher(socket, command as Command, args));
   }
 
   socket.inTransaction = false;
-  return encoder.lrange(responses);
+  return encoder.exec(responses);
 };
