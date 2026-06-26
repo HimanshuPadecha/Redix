@@ -1,30 +1,25 @@
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const expire = (socket: RedisSocket, args: string[]) => {
+export const expire = (args: string[]) => {
   if (!args || args.length !== 2) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, seconds] = args;
 
   if (!key || !seconds) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   if (Number.isNaN(parseInt(seconds))) {
-    socket.write("-ERR Invalid time to live\r\n");
-    return;
+    return "-ERR Invalid time to live\r\n";
   }
 
   const current = memory.get(key);
 
   if (!current) {
-    socket.write(":0\r\n");
-    return;
+    return ":0\r\n";
   }
 
   memory.set(key, {
@@ -32,5 +27,5 @@ export const expire = (socket: RedisSocket, args: string[]) => {
     expiresAt: Date.now() + parseInt(seconds) * 1000,
   });
 
-  socket.write(encoder.expires());
+  return encoder.expires();
 };

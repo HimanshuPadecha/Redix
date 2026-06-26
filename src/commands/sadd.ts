@@ -1,19 +1,16 @@
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const sadd = (socket: RedisSocket, args: string[]) => {
+export const sadd = (args: string[]) => {
   if (!args || args.length < 2) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, ...values] = args;
 
   if (!key || !values) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   if (!memory.has(key)) {
@@ -23,10 +20,7 @@ export const sadd = (socket: RedisSocket, args: string[]) => {
   const current = memory.get(key);
 
   if (current!.value.type !== "set") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   let valuesAdded = 0;
@@ -38,5 +32,5 @@ export const sadd = (socket: RedisSocket, args: string[]) => {
 
   writeCommandInAOF(`sadd ${key} ${values.join(" ")}`);
 
-  socket.write(encoder.sadd(valuesAdded));
+  return encoder.sadd(valuesAdded);
 };

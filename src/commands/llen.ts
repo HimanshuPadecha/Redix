@@ -1,33 +1,26 @@
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const llen = (socket: RedisSocket, args: string[]) => {
+export const llen = (args: string[]) => {
   if (!args || args.length !== 1) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key] = args;
 
   if (!key) {
-    socket.write("-ERR Error while finding key\r\n");
-    return;
+    return "-ERR Error while finding key\r\n";
   }
 
   const currnet = memory.get(key);
 
   if (!currnet) {
-    socket.write(":0\r\n");
-    return;
+    return ":0\r\n";
   }
 
   if (currnet.value.type !== "list") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
-  socket.write(encoder.llen(currnet.value.value.length));
+  return encoder.llen(currnet.value.value.length);
 };

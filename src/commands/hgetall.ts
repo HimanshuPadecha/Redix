@@ -1,32 +1,25 @@
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const hgetall = (socket: RedisSocket, args: string[]) => {
+export const hgetall = (args: string[]) => {
   if (!args || args.length !== 1) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const key = args.shift();
 
   if (!key) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const current = memory.get(key);
 
   if (!current) {
-    socket.write("*0\r\n");
-    return;
+    return "*0\r\n";
   }
 
   if (current.value.type === "string" || current.value.type === "list") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   let transformed: string[] = [];
@@ -35,5 +28,5 @@ export const hgetall = (socket: RedisSocket, args: string[]) => {
     transformed = [...transformed, key, value];
   }
 
-  socket.write(encoder.hgetall(transformed));
+  return encoder.hgetall(transformed);
 };

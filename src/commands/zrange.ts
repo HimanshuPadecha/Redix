@@ -1,33 +1,26 @@
 import { memory } from "../memory";
 import { indiciesValidator } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const zrange = (socket: RedisSocket, args: string[]) => {
+export const zrange = (args: string[]) => {
   if (!args || args.length !== 3) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, start, end] = args;
 
   if (!key || !start || !end || Number.isNaN(start) || Number.isNaN(end)) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const current = memory.get(key);
 
   if (!current) {
-    socket.write("*0\r\n");
-    return;
+    return "*0\r\n";
   }
 
   if (current.value.type !== "zset") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   const range = indiciesValidator(
@@ -37,13 +30,12 @@ export const zrange = (socket: RedisSocket, args: string[]) => {
   );
 
   if (!range) {
-    socket.write(`*0\r\n`);
-    return;
+    return `*0\r\n`;
   }
 
   const players = current.value.value
     .slice(range.start, range.end + 1)
     .map((player) => player.name);
 
-  socket.write(encoder.zrange(players));
+  return encoder.zrange(players);
 };

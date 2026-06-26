@@ -1,25 +1,20 @@
 import { subscriptions } from "../pub-sub-memory";
-import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const publish = (socket: RedisSocket, args: string[]) => {
+export const publish = (args: string[]) => {
   if (!args || args.length !== 2) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [channel, message] = args;
 
   if (!channel || !message) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const sockets = subscriptions.get(channel);
 
   if (!sockets) {
-    socket.write(":0\r\n");
-    return;
+    return ":0\r\n";
   }
 
   for (const socket of sockets) {
@@ -28,5 +23,5 @@ export const publish = (socket: RedisSocket, args: string[]) => {
     );
   }
 
-  socket.write(`:${sockets.size}\r\n`);
+  return `:${sockets.size}\r\n`;
 };

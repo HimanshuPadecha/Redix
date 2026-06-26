@@ -1,32 +1,25 @@
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const lrange = (socket: RedisSocket, args: string[]) => {
+export const lrange = (args: string[]) => {
   if (!args || args.length !== 3) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const key = args.shift();
 
   if (!key) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const current = memory.get(key);
 
   if (!current) {
-    socket.write("*0\r\n");
-    return;
+    return "*0\r\n";
   }
 
   if (current.value.type !== "list") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   const [start, end] = args;
@@ -37,13 +30,12 @@ export const lrange = (socket: RedisSocket, args: string[]) => {
     Number.isNaN(parseInt(start)) ||
     Number.isNaN(parseInt(end))
   ) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const sliced = current.value.value.slice(parseInt(start), parseInt(end));
 
   console.log(sliced);
 
-  socket.write(encoder.lrange(sliced));
+  return encoder.lrange(sliced);
 };

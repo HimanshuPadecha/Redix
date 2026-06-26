@@ -1,38 +1,30 @@
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const pop = (socket: RedisSocket, args: string[], at: "left" | "right") => {
+export const pop = (args: string[], at: "left" | "right") => {
   if (!args || args.length !== 1) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key] = args;
 
   if (!key) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const current = memory.get(key);
 
   if (!current) {
-    socket.write(":-1\r\n");
-    return;
+    return ":-1\r\n";
   }
 
   if (current.value.type !== "list") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   if (current.value.value.length === 0) {
-    socket.write(":-1\r\n");
-    return;
+    return ":-1\r\n";
   }
 
   let popped;
@@ -45,5 +37,5 @@ export const pop = (socket: RedisSocket, args: string[], at: "left" | "right") =
     popped = current.value.value.pop();
   }
 
-  socket.write(encoder.pop(popped!));
+  return encoder.pop(popped!);
 };

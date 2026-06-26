@@ -1,26 +1,22 @@
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
 import { writeCommandInAOF } from "../persistence/utils";
-import type { RedisSocket } from "../types";
 
-export const get = (socket: RedisSocket, args: string[]) => {
+export const get = (args: string[]) => {
   if (!args || args.length > 1) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key] = args;
 
   if (!key) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const value = memory.get(key);
 
   if (!value) {
-    socket.write(":-1\r\n");
-    return;
+    return ":-1\r\n";
   }
 
   const { value: actualVal, expiresAt } = value;
@@ -28,18 +24,14 @@ export const get = (socket: RedisSocket, args: string[]) => {
   if (expiresAt && expiresAt < Date.now()) {
     writeCommandInAOF(`del ${key}`);
     memory.delete(key);
-    socket.write(":-2\r\n");
-    return;
+    return ":-2\r\n";
   }
 
   if (actualVal.type !== "string") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   const encoded = encoder.get(actualVal.value);
 
-  socket.write(encoded);
+  return encoded;
 };

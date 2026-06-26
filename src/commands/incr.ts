@@ -1,19 +1,16 @@
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const incr = (socket: RedisSocket, args: string[]) => {
+export const incr = (args: string[]) => {
   if (!args || args.length > 1) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key] = args;
 
   if (!key) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   if (!memory.has(key)) {
@@ -23,21 +20,17 @@ export const incr = (socket: RedisSocket, args: string[]) => {
   const val = memory.get(key);
 
   if (val!.value.type !== "string") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   const current = parseInt(val?.value.value!);
 
   if (Number.isNaN(current)) {
-    socket.write("-ERR not an integer\r\n");
-    return;
+    return "-ERR not an integer\r\n";
   }
 
   memory.set(key, { value: { value: String(current + 1), type: "string" } });
   writeCommandInAOF(`incr ${key}`);
 
-  socket.write(encoder.incr(current + 1));
+  return encoder.incr(current + 1);
 };

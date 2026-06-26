@@ -31,3 +31,4 @@ export { zrem } from "./zrem";
 export { zrange } from "./zrange";
 export { multi } from "./multi";
 export { exec } from "./exec";
+export { discard } from "./discard";

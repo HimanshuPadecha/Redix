@@ -1,29 +1,24 @@
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const set = (socket: RedisSocket, args: string[]) => {
+export const set = (args: string[]): string => {
   if (!args) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, value, arg, seconds] = args;
 
   if (!key || !value) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   if ((arg && !seconds) || (!args && seconds)) {
-    socket.write("-ERR provide both expiry and seconds\r\n");
-    return;
+    return "-ERR provide both expiry and seconds\r\n";
   }
 
   if (arg && arg !== "ex") {
-    socket.write("-ERR server currently support expirations\r\n");
-    return;
+    return "-ERR server currently support expirations\r\n";
   }
 
   const current: {
@@ -33,8 +28,7 @@ export const set = (socket: RedisSocket, args: string[]) => {
 
   if (arg && seconds) {
     if (Number.isNaN(parseInt(seconds))) {
-      socket.write("-ERR Invalid seconds \r\n");
-      return;
+      return "-ERR Invalid seconds \r\n";
     }
 
     current.expiresAt = Date.now() + parseInt(seconds) * 1000;
@@ -43,6 +37,6 @@ export const set = (socket: RedisSocket, args: string[]) => {
   memory.set(key, current);
 
   writeCommandInAOF(`set ${key} ${value}`);
-  
-  socket.write(encoder.set());
+
+  return encoder.set();
 };

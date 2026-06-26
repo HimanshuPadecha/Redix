@@ -1,32 +1,25 @@
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const zscore = (socket: RedisSocket, args: string[]) => {
+export const zscore = (args: string[]) => {
   if (!args || args.length !== 2) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, name] = args;
 
   if (!key || !name) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const current = memory.get(key);
 
   if (!current) {
-    socket.write("$-1\r\n");
-    return;
+    return "$-1\r\n";
   }
 
   if (current.value.type !== "zset") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   const currentPlayer = current.value.value.find(
@@ -34,9 +27,8 @@ export const zscore = (socket: RedisSocket, args: string[]) => {
   );
 
   if (!currentPlayer) {
-    socket.write("$-1\r\n");
-    return;
+    return "$-1\r\n";
   }
 
-  socket.write(encoder.zscore(currentPlayer.score));
+  return encoder.zscore(currentPlayer.score);
 };

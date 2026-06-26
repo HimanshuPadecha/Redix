@@ -1,26 +1,22 @@
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const keys = (socket: RedisSocket, args: string[]) => {
+export const keys = (args: string[]) => {
   if (args.length !== 1) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const key = args.shift();
 
   if (key !== "*") {
-    socket.write("-ERR wrong arguments currently support only all keys\r\n");
-    return;
+    return "-ERR wrong arguments currently support only all keys\r\n";
   }
 
   const keys = [...memory.keys()];
 
   if (keys.length === 0) {
-    socket.write("*0\r\n");
-    return;
+    return "*0\r\n";
   }
 
-  socket.write(encoder.keys(keys));
+  return encoder.keys(keys);
 };

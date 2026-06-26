@@ -5,10 +5,11 @@
   "private": true,
   "devDependencies": {
     "@types/bun": "latest",
+    "prettier": "^3.8.5",
     "tsx": "^4.22.4"
   },
   "scripts": {
-    "dev" : "bun --watch src/server.ts"
+    "dev": "bun --watch src/server.ts"
   },
   "peerDependencies": {
     "typescript": "^5"

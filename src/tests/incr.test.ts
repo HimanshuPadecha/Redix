@@ -5,6 +5,4 @@ import { memory } from "../memory";
 import { populateOldDataInAOF, writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
 
-test("test incr", () => {
-    
-});
+test("test incr", () => {});

@@ -1,19 +1,16 @@
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const push = (socket: RedisSocket, args: string[], at: "left" | "right") => {
+export const push = (args: string[], at: "left" | "right") => {
   if (!args || args.length !== 2) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const key = args.shift();
 
   if (!key) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   if (!memory.has(key)) {
@@ -25,15 +22,11 @@ export const push = (socket: RedisSocket, args: string[], at: "left" | "right") 
   const value = args.shift();
 
   if (!value) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   if (current!.value.type !== "list") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   if (at === "left") {
@@ -44,5 +37,5 @@ export const push = (socket: RedisSocket, args: string[], at: "left" | "right") 
     writeCommandInAOF(`rpush ${key} ${value}`);
   }
 
-  socket.write(encoder.lpush(current!.value.value.length));
+  return encoder.lpush(current!.value.value.length);
 };

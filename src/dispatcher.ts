@@ -33,207 +33,174 @@ import {
   zscore,
   multi,
   exec,
+  discard,
 } from "./commands";
 
 export const commandDispatcher = (
   socket: RedisSocket,
   command: Command,
   args: string[],
-) => {
-  if (socket.inTransaction && command !== "exec") {
+): string => {
+  if (socket.inTransaction && command !== "exec" && command !== "discard") {
     socket.commandQueue.push(`${command} ${args.join(" ")}`);
-    socket.write("+QUEUED\r\n");
-    return;
+    return "+QUEUED\r\n";
   }
 
   switch (command) {
     case "ping": {
-      socket.write(encoder.ping());
-      break;
+      return encoder.ping();
     }
 
     case "echo": {
       if (args.length !== 1) {
-        socket.write("-ERR wrong number of arguments\r\n");
-        return;
+        return "-ERR wrong number of arguments\r\n";
       }
 
-      socket.write(encoder.echo(args.shift()!));
-      break;
+      return encoder.echo(args.shift()!);
     }
 
     case "set": {
-      set(socket, args);
-      break;
+      return set(args);
     }
 
     case "get": {
-      get(socket, args);
-      break;
+      return get(args);
     }
 
     case "del": {
-      del(socket, args);
-      break;
+      return del(args);
     }
 
     case "exists": {
-      exists(socket, args);
-      break;
+      return exists(args);
     }
 
     case "incr": {
-      incr(socket, args);
-      break;
+      return incr(args);
     }
 
     case "keys": {
-      keys(socket, args);
-      break;
+      return keys(args);
     }
 
     case "expire": {
-      expire(socket, args);
-      break;
+      return expire(args);
     }
 
     case "ttl": {
-      ttl(socket, args);
-      break;
+      return ttl(args);
     }
 
     case "lpush": {
-      push(socket, args, "left");
-      break;
+      return push(args, "left");
     }
 
     case "rpush": {
-      push(socket, args, "right");
-      break;
+      return push(args, "right");
     }
 
     case "llen": {
-      llen(socket, args);
-      break;
+      return llen(args);
     }
 
     case "lpop": {
-      pop(socket, args, "left");
-      break;
+      return pop(args, "left");
     }
 
     case "rpop": {
-      pop(socket, args, "right");
-      break;
+      return pop(args, "right");
     }
 
     case "lrange": {
-      lrange(socket, args);
-      break;
+      return lrange(args);
     }
 
     case "hset": {
-      hset(socket, args);
-      break;
+      return hset(args);
     }
 
     case "hget": {
-      hget(socket, args);
-      break;
+      return hget(args);
     }
 
     case "hexists": {
-      hexists(socket, args);
-      break;
+      return hexists(args);
     }
 
     case "hdel": {
-      hdel(socket, args);
-      break;
+      return hdel(args);
     }
 
     case "hgetall": {
-      hgetall(socket, args);
-      break;
+      return hgetall(args);
     }
 
     case "sadd": {
-      sadd(socket, args);
-      break;
+      return sadd(args);
     }
 
     case "srem": {
-      srem(socket, args);
-      break;
+      return srem(args);
     }
 
     case "sismember": {
-      sismember(socket, args);
-      break;
+      return sismember(args);
     }
 
     case "smembers": {
-      smembers(socket, args);
-      break;
+      return smembers(args);
     }
 
     case "scard": {
-      scard(socket, args);
-      break;
+      return scard(args);
     }
 
     case "subscribe": {
-      subscribe(socket, args);
-      break;
+      return subscribe(socket, args);
     }
 
     case "publish": {
-      publish(socket, args);
-      break;
+      return publish(args);
     }
 
     case "unsubscribe": {
-      unsubscribe(socket, args);
-      break;
+      return unsubscribe(socket, args);
     }
 
     case "zadd": {
-      zadd(socket, args);
-      break;
+      return zadd(args);
     }
 
     case "zscore": {
-      zscore(socket, args);
-      break;
+      return zscore(args);
     }
 
     case "zcard": {
-      zcard(socket, args);
-      break;
+      return zcard(args);
     }
 
     case "zrem": {
-      zrem(socket, args);
-      break;
+      return zrem(args);
     }
 
     case "zrange": {
-      zrange(socket, args);
-      break;
+      return zrange(args);
     }
 
     case "multi": {
-      multi(socket);
-      break;
+      return multi(socket);
     }
 
     case "exec": {
-      exec(socket);
-      break;
+      return exec(socket);
+    }
+
+    case "discard": {
+      return discard(socket);
     }
 
     default: {
-      socket.write(encoder.error());
+      return encoder.error();
     }
   }
 };

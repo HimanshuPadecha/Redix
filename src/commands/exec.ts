@@ -1,14 +1,19 @@
 import type { Command, RedisSocket } from "../types";
-import { commandDispatcher } from "./dispatcher";
+import { commandDispatcher } from "../dispatcher";
+import { encoder } from "../core/encoder";
 
 export const exec = (socket: RedisSocket) => {
   if (!socket.inTransaction) {
-    socket.write("-ERR EXEC without MULTI\r\n");
-    return;
+    return "-ERR EXEC without MULTI\r\n";
   }
+
+  let responses: string[] = [];
 
   for (const fullCommand of socket.commandQueue) {
     const [command, ...args] = fullCommand.split(" ");
-    commandDispatcher(socket, command as Command, args);
+    responses.push(commandDispatcher(socket, command as Command, args));
   }
+
+  socket.inTransaction = false;
+  return encoder.lrange(responses);
 };

@@ -1,19 +1,16 @@
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const hset = (socket: RedisSocket, args: string[]) => {
+export const hset = (args: string[]) => {
   if (!args || args.length !== 3) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, hkey, hvalue] = args;
 
   if (!key || !hkey || !hvalue) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   if (!memory.has(key)) {
@@ -23,23 +20,16 @@ export const hset = (socket: RedisSocket, args: string[]) => {
   const currnet = memory.get(key);
 
   if (currnet!.value.type !== "hash") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
-  }
-
-  console.log(currnet);
-
-  if (Object.hasOwn(currnet!.value.value, hkey)) {
-    socket.write(encoder.hset(0));
-  } else {
-    socket.write(encoder.hset(1));
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   currnet!.value.value[hkey] = hvalue;
 
-  console.log(currnet);
-  
   writeCommandInAOF(`hset ${key} ${hkey} ${hvalue}`);
+
+  if (Object.hasOwn(currnet!.value.value, hkey)) {
+    return encoder.hset(0);
+  } else {
+    return encoder.hset(1);
+  }
 };

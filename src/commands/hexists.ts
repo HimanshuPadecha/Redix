@@ -1,38 +1,30 @@
 import { memory } from "../memory";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const hexists = (socket: RedisSocket, args: string[]) => {
+export const hexists = (args: string[]) => {
   if (!args || args.length !== 2) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, hkey] = args;
 
   if (!key || !hkey) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const current = memory.get(key);
 
   if (!current) {
-    socket.write(":0\r\n");
-    return;
+    return ":0\r\n";
   }
 
   if (current.value.type !== "hash") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   if (!current.value.value[hkey]) {
-    socket.write(":0\r\n");
-    return;
+    return ":0\r\n";
   }
 
-  socket.write(encoder.hexists());
+  return encoder.hexists();
 };

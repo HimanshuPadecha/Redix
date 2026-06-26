@@ -68,7 +68,6 @@ export const decoder = (
     init = cursor;
 
     while (wordLen > 0) {
-
       cursor++;
       charsprocessed++;
 

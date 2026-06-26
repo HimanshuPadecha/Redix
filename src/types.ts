@@ -41,4 +41,5 @@ export type Command =
   | "zrem"
   | "zrange"
   | "multi"
-  | "exec";
+  | "exec"
+  | "discard";

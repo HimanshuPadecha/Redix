@@ -1,33 +1,26 @@
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const zrem = (socket: RedisSocket, args: string[]) => {
+export const zrem = (args: string[]) => {
   if (!args || args.length !== 2) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, name] = args;
 
   if (!key || !name) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const current = memory.get(key);
 
   if (!current) {
-    socket.write("0\r\n");
-    return;
+    return "0\r\n";
   }
 
   if (current.value.type !== "zset") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   const currnetPlayer = current.value.value.find(
@@ -35,8 +28,7 @@ export const zrem = (socket: RedisSocket, args: string[]) => {
   );
 
   if (!currnetPlayer) {
-    socket.write(":0\r\n");
-    return;
+    return ":0\r\n";
   }
 
   if (current.value.value.length === 1) {
@@ -51,5 +43,5 @@ export const zrem = (socket: RedisSocket, args: string[]) => {
   }
 
   writeCommandInAOF(`zrem ${key} ${name}`);
-  socket.write(encoder.zrem());
+  return encoder.zrem();
 };

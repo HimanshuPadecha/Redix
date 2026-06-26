@@ -4,15 +4,13 @@ import type { RedisSocket } from "../types";
 
 export const unsubscribe = (socket: RedisSocket, args: string[]) => {
   if (!args || args.length !== 1) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [channel] = args;
 
   if (!channel) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const sockets = subscriptions.get(channel);
@@ -38,5 +36,8 @@ export const unsubscribe = (socket: RedisSocket, args: string[]) => {
     }
   }
 
-  socket.write(encoder.unsubscribe(channel, !!subsCount.get(socket) ? subsCount.get(socket)! : 0));
+  return encoder.unsubscribe(
+    channel,
+    !!subsCount.get(socket) ? subsCount.get(socket)! : 0,
+  );
 };

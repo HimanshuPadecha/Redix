@@ -1,19 +1,16 @@
 import { memory } from "../memory";
 import { writeCommandInAOF } from "../persistence/utils";
 import { encoder } from "../core/encoder";
-import type { RedisSocket } from "../types";
 
-export const zadd = (socket: RedisSocket, args: string[]) => {
+export const zadd = (args: string[]) => {
   if (!args || args.length !== 3) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   const [key, score, name] = args;
 
   if (!key || !score || !name || Number.isNaN(parseInt(score))) {
-    socket.write("-ERR wrong number of arguments\r\n");
-    return;
+    return "-ERR wrong number of arguments\r\n";
   }
 
   if (!memory.has(key)) {
@@ -23,10 +20,7 @@ export const zadd = (socket: RedisSocket, args: string[]) => {
   const current = memory.get(key);
 
   if (current!.value.type !== "zset") {
-    socket.write(
-      "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n",
-    );
-    return;
+    return "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n";
   }
 
   const exsistingPlayer = current!.value.value.find(
@@ -42,5 +36,5 @@ export const zadd = (socket: RedisSocket, args: string[]) => {
   current!.value.value.sort((a, b) => b.score - a.score);
   writeCommandInAOF(`zadd ${key} ${score} ${name}`);
 
-  socket.write(encoder.zadd(exsistingPlayer ? 0 : 1));
+  return encoder.zadd(exsistingPlayer ? 0 : 1);
 };
