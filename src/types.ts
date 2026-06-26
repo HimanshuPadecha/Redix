@@ -30,4 +30,5 @@ export type Command =
   | "unsubscribe"
   | "zadd"
   | "zscore"
-  | "zcard";
+  | "zcard"
+  | "zrem";

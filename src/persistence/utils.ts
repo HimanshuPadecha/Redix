@@ -187,6 +187,26 @@ export const populateOldDataInAOF = () => {
       } else {
         current!.value.value.push({ name, score: parseInt(score) });
       }
+    } else if (key === "zrem") {
+      const [memoryKey, name] = args;
+
+      if (!memoryKey || !name) {
+        console.log("val not found in zrem");
+        return;
+      }
+
+      const current = memory.get(memoryKey);
+
+      if (!current || current.value.type !== "zset") {
+        return;
+      }
+
+      memory.set(memoryKey, {
+        value: {
+          value: current.value.value.filter((player) => player.name !== name),
+          type: "zset",
+        },
+      });
     }
   });
 

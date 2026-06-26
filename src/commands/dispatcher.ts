@@ -29,6 +29,7 @@ import { unsubscribe } from "./unsubscribe";
 import { zadd } from "./zadd";
 import { zscore } from "./zscore";
 import { zcard } from "./zcard";
+import { zrem } from "./zrem";
 
 export const commandDispatcher = (
   socket: Socket,
@@ -198,6 +199,11 @@ export const commandDispatcher = (
 
     case "zcard": {
       zcard(socket, args);
+      break;
+    }
+
+    case "zrem": {
+      zrem(socket, args);
       break;
     }
 

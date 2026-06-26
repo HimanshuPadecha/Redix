@@ -112,15 +112,19 @@ class BaseEncoder {
   }
 
   zadd(member: number): string {
-    throw new Error("ZADD encoder is not implemented")
+    throw new Error("ZADD encoder is not implemented");
   }
 
-  zscore(score : number) : string {
-    throw new Error("ZSCORE is not implemented")
+  zscore(score: number): string {
+    throw new Error("ZSCORE is not implemented");
   }
 
-  zcard(players : number) : string {
-    throw new Error("ZCARD is not implemented")
+  zcard(players: number): string {
+    throw new Error("ZCARD is not implemented");
+  }
+
+  zrem(): string {
+    throw new Error("ZREM is not implemented");
   }
 }
 
@@ -248,15 +252,19 @@ class Encoder extends BaseEncoder {
   }
 
   override zadd(member: number): string {
-    return `:${member}\r\n`
+    return `:${member}\r\n`;
   }
 
   override zscore(score: number): string {
-    return `$${String(score).length}\r\n${score}\r\n`
+    return `$${String(score).length}\r\n${score}\r\n`;
   }
 
   override zcard(players: number): string {
-    return `:${players}\r\n`
+    return `:${players}\r\n`;
+  }
+
+  override zrem(): string {
+    return `:1\r\n`;
   }
 }
 
